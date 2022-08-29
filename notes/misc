@@ -1,0 +1,104 @@
+==================================================
+;SECTIONS
+
+sections
+todo
+puppeteer engine
+what happens when i hit search
+uncategorized
+
+==================================================
+;TODO
+
+cache filter lists
+move pup notes?
+solve pwnability
+mapping
+node stuff
+	package
+	license
+	commonjs kerfuffle
+loading urls
+react
+tests
+
+==================================================
+;PUPPETEER ENGINE
+
+puppeteer
+
+async for non-function blocks?
+	just use a lambda
+
+blocker event returning page
+	to avoid cross-capture
+		which is when event that should be assigned to one url, gets listened by another
+	check how webext updates per page ad count
+
+filtering a list of ulrs
+	map using a function that:
+		takes url, browser and blocker handles
+
+google api
+	
+
+timeout?
+many pages at once?
+
+==================================================
+;WHAT HAPPENS WHEN I HIT SEARCH
+
+I hit search
+	down the OSI
+		application
+			event happens
+			page disappears
+			[lower layer stuff]
+		presentation
+			request gets prepared
+			[lower layer stuff]
+		session
+			socket?
+			[lower layer stuff]
+		transport
+			tcp?
+				ACK/NACKs
+			[lower layer stuff]
+		network
+			routing?
+			[lower layer stuff]
+		data link
+			ARP
+			frames
+			[lower layer stuff]
+		physical
+	stuff not on my computer
+the result page appears
+	dynamically loaded content loads
+
+dns?
+big site ips
+
+
+
+==================================================
+;UNCATEGORIZED
+
+simple filter
+
+get results from google api
+crawl in
+discard those that
+	display popups
+	display shit that doesn't scroll
+		unless it's nav or something
+	display ads
+		basically anything which would trigger an ad block
+		list of ad servers
+	autoplay media
+	asks for notifications?
+display result, but with the true URL
+
+links to block:
+https://zielonyogrodek.pl/katalog-roslin/byliny/9013-przylaszczka-pospolita	
+https://www.bicycling.com/repair/g20032398/how-to-do-these-five-common-bicycle-repairs/

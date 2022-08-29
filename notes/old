@@ -1,0 +1,34 @@
+==================================================
+;HACKY WAY
+
+butcher adblock plugin
+clone it
+graph dependencies
+	arkit?
+		fukit
+make it run offline
+	mock-browser?
+
+onBlockableItem
+
+stack trace
+
+devtools
+
+==================================================
+;PYTHON WAY
+
+==================================================
+;RUST WAY
+
+big nay
+	rust compiles too slowly
+
+
+use a library
+parse html
+
+meaning of adblock rules
+
+check each element
+

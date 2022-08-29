@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noEmit": true,
+    "composite": true
+  },
+  "files": [
+    "./index.ts"
+  ]
+}

@@ -48,7 +48,7 @@ def is_legit(url):
     scripts = soup.find_all('script', {'src':True})
     for s in scripts:
         if urlparse(s['src']).netloc in adservers:
-            print(f"blocked {url}");
+            #print(f"blocked {url}");
             blacklist.add(domain)
             return False
     return True

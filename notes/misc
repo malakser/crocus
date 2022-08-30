@@ -39,11 +39,20 @@ filtering a list of ulrs
 	map using a function that:
 		takes url, browser and blocker handles
 
-google api
-	
+
+ddg html
+	submit button with puppeteer
+
 
 timeout?
 many pages at once?
+
+getting at least n legit results
+	load serp
+	filter
+
+
+ini
 
 ==================================================
 ;WHAT HAPPENS WHEN I HIT SEARCH

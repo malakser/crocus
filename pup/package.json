@@ -26,9 +26,8 @@
   },
   "dependencies": {
     "@cliqz/adblocker-puppeteer": "^1.24.0",
-    "node-ddg-api": "^0.1.4",
     "node-fetch": "~2.6.6",
-    "puppeteer": "16.2.0",
+    "puppeteer": "^16.2.0",
     "ts-node": "^10.0.0"
   },
   "devDependencies": {

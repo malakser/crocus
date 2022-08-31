@@ -2,6 +2,8 @@ import { fullLists, PuppeteerBlocker, Request } from '@cliqz/adblocker-puppeteer
 import fetch from 'node-fetch';
 import * as puppeteer from 'puppeteer';
 import { promises as fs } from 'fs';
+const google = require('googlethis');
+
 
 
 /*
@@ -38,26 +40,20 @@ async function bbb() {
 	return {blocker: blocker, browser: browser};
 }
 
-async function dropPage(b, page) {
-}
 
 async function isLegit(b, url) {
-
-	//promise before 
+	//promise before loading page
   let bl = new Promise((resolve) => {
 		b.blocker.once('request-blocked', (request: Request) => {
-    	//console.log('flocked', request.url);
-			//console.dir(request);
 			resolve([url, false]);
   	});
 	});
-
 
   const page = await b.browser.newPage();
   await b.blocker.enableBlockingInPage(page);
   let pl = new Promise(async (resolve) => {
 		try {
-		await page.goto(url, { waitUntil: 'domcontentloaded', timeout:5000 });
+			await page.goto(url, { waitUntil: 'domcontentloaded', timeout:5000 });
 		} catch (e) {
 			resolve([url, "timed out"]);
 		}
@@ -65,75 +61,98 @@ async function isLegit(b, url) {
 	});
 	let a = await Promise.race([pl, bl]);
 		
+	await b.blocker.disableBlockingInPage(page);
+	await pl;
+	await page.close();
 
-	//nonblocking?
-		//nah
-	//(async () => {
-		await b.blocker.disableBlockingInPage(page);
-		await pl;
-		//console.log("page loaded");
-		await page.close();
-		//console.log("page closed");
-	//})();
 	return a;
 }
 
+
 const delay = (val, ms) => new Promise(resolve => setTimeout(() => resolve(val), ms));
-const next = async page => {
-	try {
-		await page.click('input[value="Next"]');
-	} catch (e) {
-		return false;
+
+//TODO update for normal cli app
+function getOpts() {
+	var ret:any = {};
+	var i = 0;
+	for (; i < process.argv.length; i++) {
+		if (process.argv[i].endsWith('.ts')) {
+			break;
+		}
 	}
-	try {await page.waitForNavigation({waitUntil: 'domcontentloaded'});} catch (e) {}
+	var args = process.argv.slice(i + 1);
+	ret['q'] = args[args.length - 1];
+	for (var j = 0; j < args.length - 1; j+= 2) {
+		//TODO handle invalid formatting
+		let opt_name = args[j*2].slice(1);
+		let opt_val = args[j*2+1];
+		ret[opt_name] = opt_val;
+	}
+	return ret;
 }
 
-(async () => {
-  if (process.argv[process.argv.length - 1].endsWith('.ts') === false) {
-    var q = process.argv[process.argv.length - 1];
-  } else {
-		console.log("please enter your query as a command line argument");
-		return;
-	}
 
+(async () => {
 	console.log("doin' stuff");
+
+	const opts = getOpts();
+	const q = opts.q;
+	const lang = opts.l ? opts.l : 'en';
+	console.log('query: '+q);
+	console.log('lang: '+lang);
+
+
 	const b = await bbb();
 
-	const res_page = await b.browser.newPage();
 	try {
-		await res_page.goto("https://html.duckduckgo.com/html", {waitUntil: 'domcontentloaded'});
-	} catch (e) {}
-	await res_page.focus('input[name="q"]');
-	await res_page.keyboard.type(q+'\n');
-	await res_page.waitForNavigation({waitUntil: 'domcontentloaded'});
-	console.log("result page loaded");
+		var blacklist = new Set((await fs.readFile('blacklist.txt'))
+														.toString().split('\n'));
+	} catch (e) {
+		var blacklist:Set<string> = new Set();
+	}
 
-	/*
-	let onet = "https://www.onet.pl";
-	let trup = "https://teletrup.github.io";
-	console.log(await Promise.all([isLegit(b, trup), isLegit(b, onet)]));
-	*/
-
-	//const filtered = links.filter(l => (async l => await isLegit(b, l))(l));
 
 	var legit_count = 0;
-	while (true) {
-		var links = await res_page.evaluate(() => {
-			const nlist = document.querySelectorAll('a[class=result__a]');
-			return Array.from(nlist).map(x => x.getAttribute("href"));
-		});
-		for (var l of links) {
-			var f = await isLegit(b, l); 
-			if (f[0] === false) {
-				
+	for (var page_num = 0; ; page_num++) {
+		console.log("loading page " + page_num);
+		const search_opts = {
+			page: page_num, 
+			safe: false,
+			additional_params: { 
+				hl: lang
+			}
+		}
+		const retries = 2;
+		for (let i = 0; i < retries+1; i++) {
+			if (i > 0) console.log("retrying");
+			var res = (await google.search(q, search_opts)).results;
+			if (res.length != 0) {
+				break;
+			}
+		}
+		if (res.length == 0) {
+			console.log("page "+page_num+": no results");
+			break;
+		}
+		const links = res.map(x => x.url);
+		for (let r of res) {
+			let l = r.url;
+			let host = (new URL(l)).hostname;
+			if (blacklist.has(host)) {
+				console.log(host + ' is blacklisted');
+				continue;
+			}
+			let f = await isLegit(b, l); 
+			if (f[1] === false) {
+				console.log('blacklisting ' + host);
+				blacklist.add(host);
+				await fs.appendFile('blacklist.txt', host + '\n');
 			} else if (f[1] === true) {
 				legit_count++;
 				console.log(f[0]);
 			}
 		}
-		console.log("loading next page");
-		if ((await next(res_page)) === false) break;
 	}
 
-	await b.browser.close();
+	b.browser.close();
 })();

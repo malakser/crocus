@@ -3,24 +3,51 @@
 
 sections
 todo
+features
 puppeteer engine
+nodejs
 what happens when i hit search
 uncategorized
 
 ==================================================
 ;TODO
 
-cache filter lists
+
 move pup notes?
-solve pwnability
-mapping
-node stuff
-	package
-	license
-	commonjs kerfuffle
-loading urls
-react
+tor	
+asynchronous search
 tests
+
+
+==================================================
+;FEATURES
+
+language
+custom timeout
+custom blacklist/whitelist
+chceck if site is blocked
+request removal from blacklist
+throttling
+captchas
+tokens for feedback
+
+==================================================
+;REFACTOR
+
+bbb?
+
+permanent state
+	what?
+		express app
+		websocket server
+		browser
+		blocker
+		blacklist
+	what to do?
+		class?
+		globals?
+
+pull the synchronous stuff out of (async) closure
 
 ==================================================
 ;PUPPETEER ENGINE
@@ -52,7 +79,69 @@ getting at least n legit results
 	filter
 
 
-ini
+getting 429d by the unpopular search engine
+
+==================================================
+;NODEJS
+
+package
+license
+commonjs kerfuffle
+
+==================================================
+;COMM
+
+description of behavior
+	server sends the static page
+	client sends the query
+	server begins generating results
+	server sends either:
+		a legit result
+		"end of page"
+		"end of search"
+
+server actions:
+	result
+	end of page
+	end of search
+	^^through ws?
+
+client actions:
+	search
+	moar
+	^^ through http??
+
+^^just communication?
+
+"if got a restult, request one more"
+
+calling search function from connection event, with socket arg
+
+
+queue entries:
+	result
+	end of page
+	end of search
+
+if queue is empty, wait
+	event?
+	promise?
+
+locking?
+
+websockets?
+
+
+
+static stuff
+	
+express stuff
+	static
+	res.send twice?
+	event emitter
+
+factor out the search loop
+
 
 ==================================================
 ;WHAT HAPPENS WHEN I HIT SEARCH
@@ -86,12 +175,21 @@ the result page appears
 	dynamically loaded content loads
 
 dns?
-big site ips
+big site IPs
 
+multiple tabs send requests to an http sever
+how do they get correct responses?
+	some kind of connection id?
+same with websockets
+
+print request headers
+
+dumping whole request as JSON
 
 
 ==================================================
 ;UNCATEGORIZED
+
 
 simple filter
 

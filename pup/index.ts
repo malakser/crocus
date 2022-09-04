@@ -78,6 +78,7 @@ function getOpts() {
 
 async function search(ws, q, page_num) {
 	console.log("loading page " + page_num);
+	ws.send("loading page " + page_num + "<br>");
 	const search_opts = {
 		page: page_num, 
 		safe: false,
@@ -106,23 +107,26 @@ async function search(ws, q, page_num) {
 			continue;
 		}
 		let f = await isLegit(l); 
+		if (f[1] === "timed out") console.log(l + " timed out");
 		if (f[1] === false) {
 			console.log('blacklisting ' + host);
 			blacklist.add(host);
 			await fs.appendFile('blacklist.txt', host + '\n');
 		} else if (f[1] === true) {
 			console.log(f[0]);
+			ws.send(genResHTML(r));
 		}
 	}
+	ws.send("<input type='button' id='moar' value='moar' onclick='moar()'>");
 }
 
 function genResHTML(res) {
 	const {title, description: desc, url} = res;
 	return `
 	<div class='res'>
-		<h2 class='title'>
+		<h3 class='title'>
 			${title}
-		</h2>
+		</h3>
 			<a class=snippet href='${url}'>${url}</a>
 			<div class='desc'>
 				${desc}
@@ -132,11 +136,14 @@ function genResHTML(res) {
 
 console.log("doin' stuff");
 
+/*
 const opts = getOpts();
 const q = opts.q;
 const lang = opts.l ? opts.l : 'en';
 console.log('query: '+q);
 console.log('lang: '+lang);
+*/
+const lang = 'en';
 
 var blacklist:Set<string>;
 var blocker;
@@ -170,10 +177,6 @@ var browser;
 		blacklist = new Set();
 	}
 
-	for (var page_num = 0; ; page_num++) {
-		await search(0, q, page_num);
-	}
-	browser.close();
 })();
 
 const app = express()
@@ -187,7 +190,8 @@ app.listen(3000);
 const wss = new WebSocketServer({port: 3003});
 wss.on('connection', ws => {
 	ws.on('message', msg => {
-		console.log(msg.toString());
-	});
-});
+		const command = JSON.parse(msg);
+		search(ws, command.query, command.page);
+	}); //TODO terminating search
+});//race with promise of 
 

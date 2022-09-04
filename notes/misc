@@ -3,7 +3,10 @@
 
 sections
 todo
+bugs
 features
+ui
+refactor
 puppeteer engine
 nodejs
 what happens when i hit search
@@ -15,9 +18,16 @@ uncategorized
 
 move pup notes?
 tor	
+niceness 
 asynchronous search
 tests
 
+
+==================================================
+;BUGS
+
+weird freeze
+	that was 429
 
 ==================================================
 ;FEATURES
@@ -30,6 +40,26 @@ request removal from blacklist
 throttling
 captchas
 tokens for feedback
+
+
+==================================================
+;UI
+
+
+
+footer
+	status
+	blocked
+	timed out
+	blocked new
+
+sending blocked overhead
+	
+"moar" outside of results div?
+	
+	
+
+result html on client side?
 
 ==================================================
 ;REFACTOR

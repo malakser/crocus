@@ -64,6 +64,13 @@ result html on client side?
 ==================================================
 ;REFACTOR
 
+moving stuff to client's side
+	why?
+		to simplify the server's side
+		to make the server side capable of serving multiple users without storing session-specific state
+		to make the server compute less
+		to let the client do other stuff with the results than displaying it
+
 bbb?
 
 permanent state

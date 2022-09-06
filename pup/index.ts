@@ -37,7 +37,7 @@ async function isLegit(url) {
   await blocker.enableBlockingInPage(page);
   let pl = new Promise(async (resolve) => {
 		try {
-			await page.goto(url, { waitUntil: 'domcontentloaded', timeout:5000 });
+			await page.goto(url, { waitUntil: 'domcontentloaded', timeout:3000 });
 		} catch (e) {
 			resolve([url, "timed out"]);
 		}
@@ -78,7 +78,7 @@ function getOpts() {
 
 async function search(ws, q, page_num) {
 	console.log("loading page " + page_num);
-	ws.send("loading page " + page_num + "<br>");
+	ws.send(JSON.stringify({action: 'page_load', data: page_num}));
 	const search_opts = {
 		page: page_num, 
 		safe: false,
@@ -114,10 +114,12 @@ async function search(ws, q, page_num) {
 			await fs.appendFile('blacklist.txt', host + '\n');
 		} else if (f[1] === true) {
 			console.log(f[0]);
-			ws.send(genResHTML(r));
+			ws.send(JSON.stringify({action: 'res', data: genResHTML(r)}));
 		}
 	}
-	ws.send("<input type='button' id='moar' value='moar' onclick='moar()'>");
+	console.log('end of page ' + page_num);
+	ws.send(JSON.stringify({action: 'page_end', data: page_num}));
+	//ws.send("<input type='button' id='moar' value='moar' onclick='moar()'>");
 }
 
 function genResHTML(res) {

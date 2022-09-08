@@ -1,0 +1,248 @@
+==================================================
+;SECTIONS
+
+sections
+todo
+bugs
+features
+ui
+refactor
+puppeteer engine
+nodejs
+what happens when i hit search
+uncategorized
+
+==================================================
+;TODO
+
+
+move pup notes?
+tor	
+niceness 
+asynchronous search
+tests
+
+
+==================================================
+;BUGS
+
+weird freeze
+	that was 429
+
+==================================================
+;FEATURES
+
+language
+custom timeout
+custom blacklist/whitelist
+chceck if site is blocked
+request removal from blacklist
+throttling
+captchas
+tokens for feedback
+
+
+==================================================
+;UI
+
+
+
+footer
+	status
+	blocked
+	timed out
+	blocked new
+
+sending blocked overhead
+	
+"moar" outside of results div?
+	
+	
+
+result html on client side?
+
+==================================================
+;REFACTOR
+
+moving stuff to client's side
+	why?
+		to simplify the server's side
+		to make the server side capable of serving multiple users without storing session-specific state
+		to make the server compute less
+		to let the client do other stuff with the results than displaying it
+
+bbb?
+
+permanent state
+	what?
+		express app
+		websocket server
+		browser
+		blocker
+		blacklist
+	what to do?
+		class?
+		globals?
+
+pull the synchronous stuff out of (async) closure
+
+==================================================
+;PUPPETEER ENGINE
+
+puppeteer
+
+async for non-function blocks?
+	just use a lambda
+
+blocker event returning page
+	to avoid cross-capture
+		which is when event that should be assigned to one url, gets listened by another
+	check how webext updates per page ad count
+
+filtering a list of ulrs
+	map using a function that:
+		takes url, browser and blocker handles
+
+
+ddg html
+	submit button with puppeteer
+
+
+timeout?
+many pages at once?
+
+getting at least n legit results
+	load serp
+	filter
+
+
+getting 429d by the unpopular search engine
+
+==================================================
+;NODEJS
+
+package
+license
+commonjs kerfuffle
+
+==================================================
+;COMM
+
+description of behavior
+	server sends the static page
+	client sends the query
+	server begins generating results
+	server sends either:
+		a legit result
+		"end of page"
+		"end of search"
+
+server actions:
+	result
+	end of page
+	end of search
+	^^through ws?
+
+client actions:
+	search
+	moar
+	^^ through http??
+
+^^just communication?
+
+"if got a restult, request one more"
+
+calling search function from connection event, with socket arg
+
+
+queue entries:
+	result
+	end of page
+	end of search
+
+if queue is empty, wait
+	event?
+	promise?
+
+locking?
+
+websockets?
+
+
+
+static stuff
+	
+express stuff
+	static
+	res.send twice?
+	event emitter
+
+factor out the search loop
+
+
+==================================================
+;WHAT HAPPENS WHEN I HIT SEARCH
+
+I hit search
+	down the OSI
+		application
+			event happens
+			page disappears
+			[lower layer stuff]
+		presentation
+			request gets prepared
+			[lower layer stuff]
+		session
+			socket?
+			[lower layer stuff]
+		transport
+			tcp?
+				ACK/NACKs
+			[lower layer stuff]
+		network
+			routing?
+			[lower layer stuff]
+		data link
+			ARP
+			frames
+			[lower layer stuff]
+		physical
+	stuff not on my computer
+the result page appears
+	dynamically loaded content loads
+
+dns?
+big site IPs
+
+multiple tabs send requests to an http sever
+how do they get correct responses?
+	some kind of connection id?
+same with websockets
+
+print request headers
+
+dumping whole request as JSON
+
+
+==================================================
+;UNCATEGORIZED
+
+
+simple filter
+
+get results from google api
+crawl in
+discard those that
+	display popups
+	display shit that doesn't scroll
+		unless it's nav or something
+	display ads
+		basically anything which would trigger an ad block
+		list of ad servers
+	autoplay media
+	asks for notifications?
+display result, but with the true URL
+
+links to block:
+https://zielonyogrodek.pl/katalog-roslin/byliny/9013-przylaszczka-pospolita	
+https://www.bicycling.com/repair/g20032398/how-to-do-these-five-common-bicycle-repairs/

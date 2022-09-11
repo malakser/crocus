@@ -3,12 +3,13 @@ from urllib.parse import urlparse
 from urllib.parse import urljoin 
 import collections 
 import requests 
-
+import jsons
+from typing import List
 
 blacklist = set() 
 legit = dict()
 sites = dict()
-queue = collections.deque()
+slist = []
 
 
 class Site:
@@ -18,11 +19,12 @@ class Site:
     s.outlinks = []
     s.status = 'uncrawled'
     sites[s.url] = s
+    slist.append(s)
   def __str__(s):
     p = lambda x: '\n'+'\n'.join(map(lambda y: f'    {y.desc()}' if y else '', x)) if x else ''
     return f"{s.url}:\n  status: {s.color(s.status)}\n  inlinks:{p(s.inlinks)}\n  outlinks:{p(s.outlinks)}"
   def color(s, strn):
-    c = {'ok':37, 'blocked':'31', 'uncrawled':33, 'dead':90}[s.status]
+    c = {'ok':37, 'blocked':'31', 'uncrawled':33, 'dead':90, 'nothtml':35}[s.status]
     return f'\x1b[{c}m{strn}\x1b[37m'
   def desc(s):
     return s.color(f'[{s.status}] {s.url}')
@@ -44,6 +46,9 @@ class Site:
     except:
       s.status = 'dead'
       return s
+    if not resp.headers['content-type'].startswith('text/html'):
+      s.status = 'nothtml'
+      return s
     if resp.status_code != 200:
       print(s.url+' is dead')
       s.status = 'dead'
@@ -59,11 +64,10 @@ class Site:
     links = map(lambda x: absolutize(s.url, x.get('href')).strip(), soup('a'))
     for l in links:
       if l in sites:
-        sites[l].add_inlink(s)
+        sites[l].add_inlink(s.url)
       else:
         Site(l, s)
-        queue.append(sites[l])
-      s.outlinks.append(sites[l])
+      s.outlinks.append(l)
     legit[s.url] = s
     s.status = 'ok'
     return s
@@ -85,9 +89,18 @@ root = Site("https://ranprieur.com/essays/dropout.html")
 #root = Site("http://directory.ic.org/")
 root.crawl()
 
-for i in range(1000):
-  queue.popleft().crawl()
+n = 5
 
-top = sorted(legit.values(), key=lambda x: len(x.inlinks), reverse=True)
+i = 0
+for s in slist:
+  if i >= n:
+    break
+  if s.status == 'uncrawled':
+    print(f'{i} ', end='')
+    s.crawl()
+    i += 1
+
+
+top = sorted(legit.values(), key=lambda x: len(x.inlinks))
 printlist([f'{x.color(len(x.inlinks))} {x.desc()}' for x in top])
-
+jsons.dumps(slist[0])

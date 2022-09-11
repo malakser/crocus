@@ -28,6 +28,7 @@ sites as ordered dict?
   no queue
   just find the oldest uncrawled site
 
+just key lists in class
 
 ==================================================
 ;UNCATEGORIZED
@@ -54,3 +55,4 @@ testing?
 storing offline html?
 
 async?
+

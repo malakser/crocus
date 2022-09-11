@@ -155,7 +155,6 @@ var browser;
   );
 
   browser = await puppeteer.launch({
-    // @ts-ignore
     defaultViewport: null,
     headless: true,
   });
@@ -163,7 +162,7 @@ var browser;
 
 	try {
 		blacklist = new Set((await fs.readFile('blacklist.txt'))
-														.toString().split('\n'));
+															 .toString().split('\n'));
 	} catch (e) {
 		blacklist = new Set();
 	}

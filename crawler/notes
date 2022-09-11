@@ -1,0 +1,56 @@
+==================================================
+;SECTIONS
+
+sections
+crawl heuristics
+incremental save
+uncategorized
+
+
+==================================================
+;CRAWL HEURISTICS
+
+ad stink
+
+can the script request an ad?
+  any js
+  request
+  third-party url in script as a string constant
+
+==================================================
+;INCREMENTAL SAVE
+
+sites & blacklist after each entry
+
+queue can be regenerated
+
+sites as ordered dict?
+  no queue
+  just find the oldest uncrawled site
+
+
+==================================================
+;UNCATEGORIZED
+
+"known" storing urls or sites?
+  does it matter?
+  it's just a pointer
+
+hasad server
+
+rank heuristics and crawl heuristics
+
+
+"Site" as class
+  storing parents and children?
+
+heuristics updated while site in queue?
+
+dead domains 
+
+testing?
+
+
+storing offline html?
+
+async?

@@ -17,6 +17,10 @@ can the script request an ad?
   request
   third-party url in script as a string constant
 
+boredom
+  same parent for too long
+  domain based?
+
 ==================================================
 ;INCREMENTAL SAVE
 
@@ -29,6 +33,12 @@ sites as ordered dict?
   just find the oldest uncrawled site
 
 just key lists in class
+
+but blacklist is a set
+
+blacklist as ordered dict
+blacklist as list
+blackdict
 
 ==================================================
 ;UNCATEGORIZED

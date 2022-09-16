@@ -2,10 +2,17 @@
 ;SECTIONS
 
 sections
+todo
 crawl heuristics
 incremental save
+bugs
 uncategorized
 
+
+==================================================
+;TODO
+
+clean up
 
 ==================================================
 ;CRAWL HEURISTICS
@@ -24,6 +31,7 @@ boredom
 ==================================================
 ;INCREMENTAL SAVE
 
+
 sites & blacklist after each entry
 
 queue can be regenerated
@@ -41,7 +49,26 @@ blacklist as list
 blackdict
 
 ==================================================
+;BUGS
+
+duplicate crawling
+
+pages like this - https://www.rpmfind.net/linux/RPM/CentOS.html 
+	too many links
+	links to non-html stuff?
+    not on that particlular page
+requesting just content info
+  deeper dive into http
+  
+==================================================
 ;UNCATEGORIZED
+
+scrapy?
+
+deduplication
+  hash the html
+    hash as the key?
+  strip stuff after '#' in urls
 
 "known" storing urls or sites?
   does it matter?
@@ -66,3 +93,4 @@ storing offline html?
 
 async?
 
+ordered dict and infinite iteration

@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from urllib.parse import urljoin 
+from urllib.parse import urldefrag
 import collections 
 import requests 
 import jsons
@@ -19,30 +20,36 @@ class Site:
       s.url = arg['url']
       s.status = arg['status']
       s.inlinks = arg['inlinks']
-      s.outlinks = arg['outlinks']
+      #s.outlinks = arg['outlinks']
       sites[s.url] = s
       slist.append(s)
     else:
       s.url = arg
       s.inlinks = [inlink] if inlink else []
-      s.outlinks = []
+      #s.outlinks = []
       s.status = 'uncrawled'
       sites[s.url] = s
       slist.append(s)
+
   def __str__(s):
     p = lambda x: '\n'+'\n'.join(map(lambda y: f'    {y.desc()}' if y else '', x)) if x else ''
     return f"{s.url}:\n  status: {s.color(s.status)}\n  inlinks:{p(s.inlinks)}\n  outlinks:{p(s.outlinks)}"
+
   def color(s, strn):
     c = {'ok':37, 'blocked':'31', 'uncrawled':33, 'dead':90, 'nothtml':35}[s.status]
     return f'\x1b[{c}m{strn}\x1b[37m'
+
   def desc(s):
     return s.color(f'[{s.status}] {s.url}')
+
   def add_inlink(s, p):
     s.inlinks.append(p)
     return s
+
   def crawl(s):
     print(f'crawling {s.url}')
-    global queue
+    global slist
+    global sites
     global legit
     global blackset
     loc = urlparse(s.url).netloc
@@ -51,10 +58,16 @@ class Site:
       s.status = 'blocked'
       return s
     try:  
-      resp = requests.get(s.url, timeout=5)
+      hs = {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30'}
+      resp = requests.head(s.url, timeout=1, headers=hs)
+      if int(resp.headers['content-length']) > 1024**2:
+        s.status = 'toobig'
+        print(s.url+' is too big')
+        return s
       if not resp.headers['content-type'].startswith('text/html'):
         s.status = 'nothtml' #TODO sort that out
         return s
+      resp = requests.get(s.url, timeout=1, headers=hs)
     except:
       s.status = 'dead'
       return s
@@ -70,14 +83,13 @@ class Site:
       blackset.add(loc)
       s.status = 'blocked'
       return s
-
     links = map(lambda x: absolutize(s.url, x.get('href')).strip(), soup('a'))
     for l in links:
       if l in sites:
         sites[l].add_inlink(s.url)
       else:
         Site(l, s)
-      s.outlinks.append(l)
+      #s.outlinks.append(l)
     legit[s.url] = s
     s.status = 'ok'
     return s
@@ -91,11 +103,16 @@ def printlist(l):
     print(el)
 
 def absolutize(url, path):
+  path, _ = urldefrag(path)
   if urlparse(path).netloc:
     return path
   return urljoin(url, path)
 
 try:
+  with open('blacklist.txt') as f:
+    print('loading blacklist')
+    blacklist = f.read().splitlines()
+    blackset = set(blacklist)
   with open('slist.json') as f:
     print('loading slist')
     dlist = jsons.loads(f.read())
@@ -103,10 +120,6 @@ try:
       s = Site(d)
       if s.status == 'ok':
         legit[s.url] = s
-  with open('blacklist.txt') as f:
-    print('loading blacklist')
-    blacklist = f.read().splitlines()
-    blackset = set(blacklist)
 except:
   root = Site("https://ranprieur.com/essays/dropout.html")
   root.crawl()
@@ -130,28 +143,38 @@ n = 10000
 bmax = 10
 
 lastp = ''
-b = 0
+lastd = ''
+b1 = 0
+b2 = 0
 
 lup = True
-
 while lup:
-  for i, s in enumerate(slist):
+  i = 0
+  for s in slist:
+    loc = urlparse(s.url).netloc
     if len(slist) >= n:
       lup = False
       break
     if s.status == 'uncrawled':
-      print(f'{i} {len(slist)} ', end='')
       if s.inlinks[0] == lastp:
-        b += 1
+        b1 += 1
       else:
-        b = 0
-      if b > bmax:
+        b1 = 0
+      if loc == lastd:
+        b2 += 1
+      else:
+        b2 = 0
+      print(b1, b2)
+      if b1 >= bmax or b2 >= bmax:
         print(f'{s.url} postponed')
       else:
+        print(f'{i} {len(slist)} ', end='')
         s.crawl()
       i += 1
       lastp = s.inlinks[0]
+      lastd = loc
 
+print(f'final len {len(slist)}') 
 save()
 
 

@@ -28,6 +28,11 @@ boredom
   same parent for too long
   domain based?
 
+heat
+	tracked for each parent and domain
+	each loop step is counted
+
+
 ==================================================
 ;INCREMENTAL SAVE
 

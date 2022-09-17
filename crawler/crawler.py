@@ -62,18 +62,19 @@ class Site:
       resp = requests.head(s.url, timeout=1, headers=hs)
       if int(resp.headers['content-length']) > 1024**2:
         s.status = 'toobig'
-        print(s.url+' is too big')
+        print(f'{s.url} is too big')
         return s
       if not resp.headers['content-type'].startswith('text/html'):
         s.status = 'nothtml' #TODO sort that out
         return s
       resp = requests.get(s.url, timeout=1, headers=hs)
     except:
-      s.status = 'dead'
+      print(f'{s.url} timed out')
+      s.status = 'timeout'
       return s
     if resp.status_code != 200:
-      print(s.url+' is dead')
-      s.status = 'dead'
+      print(f'{s.url}: error {resp.status_code}')
+      s.status = 'error'
       return s
     soup = BeautifulSoup(resp.content, 'html.parser')
     if soup.find('script'):
@@ -122,6 +123,7 @@ try:
         legit[s.url] = s
 except:
   root = Site("https://ranprieur.com/essays/dropout.html")
+  #root = Site("http://seedmagazine.com/content/article/to_be_a_baby/")
   root.crawl()
 
 blacklist_inc = len(blacklist)
@@ -140,12 +142,13 @@ def save():
 
 
 n = 10000
-bmax = 10
+pmax = 10
+dmax = 100
 
-lastp = ''
-lastd = ''
-b1 = 0
-b2 = 0
+last_parent = ''
+last_domain = ''
+b_parent = 0
+b_domain = 0
 
 lup = True
 while lup:
@@ -156,23 +159,23 @@ while lup:
       lup = False
       break
     if s.status == 'uncrawled':
-      if s.inlinks[0] == lastp:
-        b1 += 1
+      if s.inlinks[0] == last_parent:
+        b_parent += 1
       else:
-        b1 = 0
-      if loc == lastd:
-        b2 += 1
+        b_parent = 0
+      if loc == last_domain:
+        b_domain += 1
       else:
-        b2 = 0
-      print(b1, b2)
-      if b1 >= bmax or b2 >= bmax:
+        b_domain = 0
+      print(b_parent, b_domain)
+      if b_parent >= pmax or b_domain >= dmax:
         print(f'{s.url} postponed')
       else:
         print(f'{i} {len(slist)} ', end='')
         s.crawl()
       i += 1
-      lastp = s.inlinks[0]
-      lastd = loc
+      last_parent = s.inlinks[0]
+      last_domain = loc
 
 print(f'final len {len(slist)}') 
 save()

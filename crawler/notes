@@ -12,6 +12,8 @@ uncategorized
 ==================================================
 ;TODO
 
+
+blacklisting heat logic
 clean up
 
 ==================================================
@@ -53,6 +55,8 @@ blacklist as ordered dict
 blacklist as list
 blackdict
 
+domain list
+
 ==================================================
 ;BUGS
 
@@ -64,9 +68,23 @@ pages like this - https://www.rpmfind.net/linux/RPM/CentOS.html
     not on that particlular page
 requesting just content info
   deeper dive into http
+
+https://episcopalchurch.org/files/ellibrodeoracioncomun_0.pdf
+	doesn't detect wrong filetype
+
+sites with iframes?
+	https://www.cartoongamez.com/game10.html
+
+sneaky bug
+  site instead of link
   
 ==================================================
 ;UNCATEGORIZED
+
+refactor
+  domain dict
+    heat
+    blocked?
 
 scrapy?
 

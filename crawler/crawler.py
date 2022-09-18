@@ -25,7 +25,7 @@ class Site:
       slist.append(s)
     else:
       s.url = arg
-      s.inlinks = [inlink] if inlink else []
+      s.inlinks = [inlink.url] if inlink else []
       #s.outlinks = []
       s.status = 'uncrawled'
       sites[s.url] = s
@@ -53,34 +53,36 @@ class Site:
     global legit
     global blackset
     loc = urlparse(s.url).netloc
-    if loc in blackset: 
+    if loc in blackset: #TODO ;dom
       print(loc+' is blacklisted')
       s.status = 'blocked'
       return s
     try:  
-      hs = {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30'}
-      resp = requests.head(s.url, timeout=1, headers=hs)
+      ua = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30'
+      hs = {'User-Agent':ua, 'Range':'bytes=0-1000000'}
+      resp = requests.get(s.url, timeout=0.5, headers=hs)
       if int(resp.headers['content-length']) > 1024**2:
         s.status = 'toobig'
         print(f'{s.url} is too big')
         return s
       if not resp.headers['content-type'].startswith('text/html'):
+        print(f'{s.url}: not html');
         s.status = 'nothtml' #TODO sort that out
         return s
-      resp = requests.get(s.url, timeout=1, headers=hs)
+      #resp = requests.get(s.url, timeout=2.5, headers=hs)
     except:
       print(f'{s.url} timed out')
       s.status = 'timeout'
       return s
-    if resp.status_code != 200:
+    if resp.status_code != 200 and resp.status_code != 206:
       print(f'{s.url}: error {resp.status_code}')
       s.status = 'error'
       return s
     soup = BeautifulSoup(resp.content, 'html.parser')
-    if soup.find('script'):
+    if soup.find('script') or soup.find('iframe'):
       #TODO if hasads
       print('blacklisting '+loc)
-      blacklist.append(loc)
+      blacklist.append(loc) #TODO ;dom
       blackset.add(loc)
       s.status = 'blocked'
       return s
@@ -111,12 +113,13 @@ def absolutize(url, path):
 
 try:
   with open('blacklist.txt') as f:
-    print('loading blacklist')
+    print('loading blacklist') #;dom
     blacklist = f.read().splitlines()
     blackset = set(blacklist)
   with open('slist.json') as f:
     print('loading slist')
-    dlist = jsons.loads(f.read())
+    dlist = jsons.loads(f.read()) #;rename
+    print('slist loaded');
     for d in dlist:
       s = Site(d)
       if s.status == 'ok':
@@ -124,6 +127,9 @@ try:
 except:
   root = Site("https://ranprieur.com/essays/dropout.html")
   #root = Site("http://seedmagazine.com/content/article/to_be_a_baby/")
+  #root = Site("https://episcopalchurch.org/files/ellibrodeoracioncomun_0.pdf")
+  #root = Site("https://www.cartoongamez.com/game10.html")
+  #root = Site("https://www.rpmfind.net/linux/RPM/CentOS.html")
   root.crawl()
 
 blacklist_inc = len(blacklist)
@@ -141,41 +147,40 @@ def save():
     f.write(jsons.dumps(slist))
 
 
-n = 10000
+n = 40000
 pmax = 10
 dmax = 100
 
-last_parent = ''
-last_domain = ''
-b_parent = 0
-b_domain = 0
+dheat = {}
 
 lup = True
+t = 1
 while lup:
   i = 0
   for s in slist:
-    loc = urlparse(s.url).netloc
     if len(slist) >= n:
       lup = False
       break
+    #par = s.inlinks[0]
+    loc = urlparse(s.url).netloc
+    if loc not in dheat:
+      dheat[loc] = 0
     if s.status == 'uncrawled':
-      if s.inlinks[0] == last_parent:
-        b_parent += 1
+      if dheat[loc] / t > 1 / len(dheat):
+        #print(f'{s.url} postponed - domain too hot')
+        dheat[loc] -= 0.01
       else:
-        b_parent = 0
-      if loc == last_domain:
-        b_domain += 1
-      else:
-        b_domain = 0
-      print(b_parent, b_domain)
-      if b_parent >= pmax or b_domain >= dmax:
-        print(f'{s.url} postponed')
-      else:
+        t += 1
+        dheat[loc] += 1
         print(f'{i} {len(slist)} ', end='')
         s.crawl()
+        if s.status == 'blocked':
+          for il in s.inlinks:
+            dheat[urlparse(il).netloc] += 10
+          dheat[loc] = float('-inf')
+        if s.status == 'timeout':
+          dheat[loc] += 10
       i += 1
-      last_parent = s.inlinks[0]
-      last_domain = loc
 
 print(f'final len {len(slist)}') 
 save()

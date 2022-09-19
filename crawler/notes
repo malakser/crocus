@@ -6,6 +6,7 @@ todo
 crawl heuristics
 incremental save
 bugs
+refactor
 uncategorized
 
 
@@ -79,12 +80,51 @@ sneaky bug
   site instead of link
   
 ==================================================
+;REFACTOR
+
+pages are dataclasses
+
+
+"fetch" downloads the page and sets its status
+  a method of Page
+
+"crawl":
+  - checks blacklist
+  - tries to fetch the page
+  - looks for links
+  - adds an inlink to each linked page:
+      linked pages are added to the repo if they don't exist
+      ...
+    ^^ meh, a lot of messing around with stuff that doesn't come to mind when you think "crawl"
+      but that's simple stuff
+    
+but fetching and crawling separately means passing outlinks
+          
+
+page never exists on its own
+  page repo?
+
+
+site doesn't push itself
+  push_site does
+
+domain dict
+  heat
+  blocked?
+
+domain as
+  dict?
+  dataclass?
+  class?
+
+==================================================
+;TESTING
+
+crawler-test.com
+
+==================================================
 ;UNCATEGORIZED
 
-refactor
-  domain dict
-    heat
-    blocked?
 
 scrapy?
 
@@ -109,7 +149,6 @@ heuristics updated while site in queue?
 
 dead domains 
 
-testing?
 
 
 storing offline html?

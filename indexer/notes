@@ -1,0 +1,23 @@
+
+proximity
+page references
+titles
+body
+
+vector based search
+ai stuff
+
+is sorting stuff necessary?
+  you're not gonna rank all the results
+
+using a database?
+  sql vs nosql?
+  can a db handle the inverse index?
+
+inverted index as just a set
+
+use a debugger
+
+lazy datastructures & filtering
+
+site filter

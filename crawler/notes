@@ -3,6 +3,7 @@
 
 sections
 todo
+far out
 crawl heuristics
 incremental save
 bugs
@@ -16,6 +17,21 @@ uncategorized
 
 blacklisting heat logic
 clean up
+
+==================================================
+;FAR OUT
+
+updating index/page repo
+multiple crawlers
+
+ml
+  embedding
+  optimizers
+
+0 downtime [move appropriately]
+  continuous integration?
+  run in containers & switch ports?
+
 
 ==================================================
 ;CRAWL HEURISTICS
@@ -39,8 +55,9 @@ heat
 ==================================================
 ;INCREMENTAL SAVE
 
-
-sites & blacklist after each entry
+not just appending
+  stuff that's in old domain list might be blacklisted
+  heat gets updated every step
 
 queue can be regenerated
 
@@ -52,16 +69,13 @@ just key lists in class
 
 but blacklist is a set
 
-blacklist as ordered dict
-blacklist as list
-blackdict
-
-domain list
 
 ==================================================
 ;BUGS
 
 duplicate crawling
+
+http://ctm.crouchingtigerhiddenfruitbat.org/pub/cygwin/circa/2019/02/21/161443/index.html
 
 pages like this - https://www.rpmfind.net/linux/RPM/CentOS.html 
 	too many links
@@ -82,6 +96,42 @@ sneaky bug
 ==================================================
 ;REFACTOR
 
+informal description
+A crawler visits sites, discovers links for other sites and visits them
+  errors
+  blacklist
+  saving
+    restart
+
+
+defaultdicts and dataclasses considered harmful?
+  can't have nice things without introducing even more complexity
+  defaultdicts
+    can't initialize default from key
+    dataclasses 
+      mutable init
+
+everything by key?
+  nah?
+    pointers are faster
+    doing it with keys is messier
+
+storing dict keys in dict entries?
+  yay
+    unnecessary
+  nay
+    paragraph above
+    pleasing?
+      rly?
+
+
+nondeterministic part - request
+
+separating nondeterministic part?
+
+
+true functions
+
 pages are dataclasses
 
 
@@ -97,8 +147,14 @@ pages are dataclasses
       ...
     ^^ meh, a lot of messing around with stuff that doesn't come to mind when you think "crawl"
       but that's simple stuff
+
+per-page crawl function
+  it can be done asynchronously
+
+storing blacklisted page objects?
     
 but fetching and crawling separately means passing outlinks
+  what's wrong with that?
           
 
 page never exists on its own
@@ -156,3 +212,4 @@ storing offline html?
 async?
 
 ordered dict and infinite iteration
+

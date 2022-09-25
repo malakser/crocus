@@ -74,8 +74,14 @@ but blacklist is a set
 ;BUGS
 
 duplicate crawling
+  differnet protocols?
+    it's not a bug!
+      or is it?
+      sometimes https sites got blocked while http didn't
+        maybe it's the crawl order
 
 http://ctm.crouchingtigerhiddenfruitbat.org/pub/cygwin/circa/2019/02/21/161443/index.html
+	large site with consistent, slow download
 
 pages like this - https://www.rpmfind.net/linux/RPM/CentOS.html 
 	too many links

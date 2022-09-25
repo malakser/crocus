@@ -111,11 +111,11 @@ def absolutize(url, path):
   return urljoin(url, path)
 
 try:
-  with open('domains.json') as f:
+  with open('../data/domains.json') as f:
     dold = jsons.loads(f.read())
     domains = {k:Domain(*v) for k, v in dold.items()}
     print('domains loaded')
-  with open('slist.json') as f:
+  with open('../data/slist.json') as f:
     print('loading slist')
     dlist = jsons.loads(f.read()) #;rename
     print('slist loaded');
@@ -134,10 +134,10 @@ except:
 
 def save():
   print('saving')
-  with open('domains.json', 'w') as f:
+  with open('../data/domains.json', 'w') as f:
     dnew = {k:[v.blacklisted, v.heat] for k, v in domains.items()}
     f.write(jsons.dumps(dnew))
-  with open('slist.json', 'w') as f:
+  with open('../data/slist.json', 'w') as f:
     f.write(jsons.dumps(slist))
 
 

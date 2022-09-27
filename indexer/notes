@@ -21,3 +21,31 @@ use a debugger
 lazy datastructures & filtering
 
 site filter
+
+jsons is stupid
+  badly named
+  slow
+
+regular dicts & efficiency
+  regular - same keys in collections
+  structlike
+
+
+fidx = [doc]
+  doc = [word]
+  word = (name, [pos])
+
+bidx = [(word, docs)]
+
+3d
+
+toobig
+  per-site incremental index update
+  use some dbms
+  sql approach
+    would need a table for each doc
+
+leveldb
+
+
+  

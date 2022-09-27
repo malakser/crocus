@@ -1,46 +1,53 @@
-docs = {'a':'aaa bbb ccc aaa', 'b':'bbb ccc ccc bbb', 'c':'aaa aaa ccc', 'd':'aaa bbb aaa ccc bbb aaa ccc ddd'}
-
-def gen_wordlist():
-  words = set()
-  for doc in docs.values():
-    for w in doc.split():
-      words.add(w)
-  return words
+import requests
+import jsons 
+import re
+from bs4 import BeautifulSoup
 
 
-def forward_index(doc):
-  res = {}
-  for i, w in enumerate(doc.split()):
-    if w in res:
-      res[w] += [i]
+with open('../data/legit100.json') as f:
+  sites = jsons.loads(f.read())
+
+def word_clean(word):
+  word = word[:100].lower()
+  word = re.sub(r'[\\\[\]~`!@#$%^&*()+={}:"|;,./<>?]', '', word)
+  return word
+
+def idx_gen(text):
+  words = text.split()
+  idx = {}
+  pos = 0
+  for w in words:
+    i = text.index(w)
+    pos += i
+    wc = word_clean(w)
+    if wc in idx:
+      idx[wc].append(pos)
     else:
-      res[w] = [i]
+      idx[wc] = [pos]
+    text = text[i:]
+  return idx
+
+#adding to both indexes in idx_gen?
+#separate inverse indexes for titles and bodies?
+#generating forward and backward indexes back to back?
+#pull function called from idx_gen
+#returning bo
+#idx_gen called with url
+
+
+def pull_stuff(url):
+  ua = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30'
+  hs = {'User-Agent':ua, 'Range':'bytes=0-1000000'}
+  resp = requests.get(url, headers=hs)
+  soup = BeautifulSoup(resp.content, 'html.parser')
+  title = soup.title.text
+  body = soup.body.text
+  res = {'title':title, 'title_idx':idx_gen(title), 'body_idx':idx_gen(body)}
+  print(url)
+  #print(res)
   return res
 
-wlist = gen_wordlist()
+doc_idx = {s['url']:pull_stuff(s['url']) for s in sites[:1]}
 
-fidx = {k:forward_index(v) for k, v in docs.items()}
 
 print(docs)
-print(wlist)
-print(fidx)
-
-def backward_index(word):
-  res = {}
-  for k, v in fidx.items():
-    if word in v:
-      res[k] = v[word]
-  return res
-
-bidx = {k:backward_index(k) for k in wlist}
-
-
-print(bidx)
-
-#q = 'aaa ccc'
-q = 'ddd aaa ccc'
-foo = [set(bidx[w]) for w in q.split()]
-foo = sorted(foo, key=lambda x: len(x)) 
-print(foo)
-#print(foo[0].intersection(*foo[1:]))
-    

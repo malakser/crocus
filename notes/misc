@@ -1,3 +1,46 @@
+==================================================
+;SECTIONS
+
+todo
+questions
+hackier
+writeup
+
+==================================================
+;TODO
+
+
+
+==================================================
+;QUESTIONS
+
+question
+
+==================================================
+;HACKIER
+
+glue up as much as possible
+
+crawler with scrapy
+search with
+  whoosh
+    old
+  lunrjs
+  elasticlunrjs
+    they have nicely styled homepage
+    they tell me not to do it
+  sphinx
+  manticore
+    
+
+
+==================================================
+;WRITEUP
+
+
+search for the actual information
+
+
 a search engine for the part of web that's actually interesting
 
 an attempt at making the internet awesome again
@@ -8,8 +51,6 @@ PoC || GTFO?
 
 please tell me why am I wrong
 
-bootstrapping infrastructure that 
-
 
 50000 crocuses
 	weirdness without hype
@@ -17,6 +58,13 @@ bootstrapping infrastructure that
 
 what Cristopher Alexander called "anal"
 	it may be full of shit and if it isn't, it will be
+
+sites to be read and navigated
+
+you can do a lot with css
+
+css zen garden
+  some of it looks gnarly
 
 spartan nojs
 
@@ -34,6 +82,8 @@ what is the web for
 
 rediscovery of the good old internet
 
+not against bazaar
+JC at the temple
 
 amish?
 
@@ -54,49 +104,29 @@ is pagerank pwnable?
 
 mismatch between value to the end user and the value to the contractor
 
+newsletters to ask for email
+
+SEO spam
+
 gugl
 	freeloaders
 implicit stochastic pimping
 
+google papers
+
 crocus
-computers need food
+the [horticulturally meanigful name] company
+
+computers and programmers need food
+we sell the part of it that really scales
+  ml models, compute & stuff
+
+the puropose of the co
+
+to give the ecosystem a monarchical branch
+
+i'm a larva
 	
 does the defense win?
 
-not against bazaar
-JC at the temple
-
-==================================================
-PHILOSOPHY
-
-remove this section?
-  yay
-    politicreep
-    a bit against the vibe
-  nay
-    specifying philosophy as a mean of avoiding corruption
-  hide
-
-politics is like STDs
-if something's STD-free, it's probably better to not mention it unless there are good reasons to do so
-
-my desire to signal to the unsure
-I don't want my words twisted by knaves
-
-deception is violence
-  but crocus isn't about all of deception, it's about ads
-disintrest in power over people
-
-programming is a positive sum game
-not a nanny
-ankles of gods
-
-it isn't about democratizing shit
-uncratize
-
-to prevent value drift
-
-
-it's not about making people good
-
-
+it won't be datamining, users are not rocks

@@ -1,0 +1,61 @@
+
+todo
+  reorganize
+  generate pagination
+
+proper names
+verbatim
+
+proximity
+page references
+titles
+body
+
+vector based search
+ai stuff
+
+is sorting stuff necessary?
+  you're not gonna rank all the results
+tf-idf
+
+
+many-level ranking
+
+
+
+fuzzy keyword match?
+
+regex
+  first search using indices
+
+serve a static file and handle the rest through AJAX
+
+websockets
+  naah 
+    websockets are good when the server has to push stuff more than once without being asked
+      it might be good for delaying a query
+  server-side rendering?
+    yay
+    nay
+      wastes bandwidth
+      more complex
+
+
+
+should crocus be crocusable?
+  of course
+    it doesn't have to be using some of the strictest indices
+      well, if it uses JS it will be NOT crocusable using all the non-JS indices
+
+
+
+indices
+  nojs strict
+    blacklists domain after 1st occurence of a script
+  nojs mild
+  adblock^2 quick
+    no adserver requests before the dom loads
+  adblock^2 slow
+
+lock file
+

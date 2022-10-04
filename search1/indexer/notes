@@ -1,0 +1,44 @@
+why is sync so slow
+why is foo['bar'] = baz fast
+
+cache
+
+syncing periodically
+
+maybe it caches it in the file
+
+re-read page rank
+
+ranking heuristics within the result and the whole index
+
+
+inverted index as just a set
+
+use a debugger
+
+lazy datastructures & filtering
+
+site filter
+
+jsons is stupid
+  badly named
+  slow
+
+regular dicts & efficiency
+  regular - same keys in collections
+  structlike
+
+
+fidx = [doc]
+  doc = [word]
+  word = (name, [pos])
+
+bidx = [(word, docs)]
+
+queued shelf write?
+
+todo
+  prepare simple frontend
+  figure out concurrent db access
+  rewrite the crawler
+

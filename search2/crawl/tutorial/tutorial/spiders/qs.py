@@ -22,9 +22,6 @@ def is_followable(link, logger):
   schemes = {'https', 'http', 'ftp', ''}
   if props.scheme not in schemes:
     return False
-  if props.netloc in blacklist: #TODO move to appropriate signal to cancel already queued requests
-    logger.info(f'{link} is blacklisted')
-    return False 
   return True
   
 
@@ -37,9 +34,21 @@ class QuotesSpider(scrapy.Spider):
   def from_crawler(cls, crawler):
     spider = super().from_crawler(crawler)
     crawler.signals.connect(spider.headers_received, signal=scrapy.signals.headers_received)
+    crawler.signals.connect(spider.request_reached_downloader, signal=scrapy.signals.request_reached_downloader)
     return spider
 
-  def headers_received(self, headers, body_length, request, spider):
+  def request_reached_downloader(self, request, spider): #TODO whyyy it blacklists multiple times?
+    link = request.url
+    props = urllib.parse.urlparse(link)
+    if props.netloc in blacklist: #TODO move to appropriate signal to cancel already queued requests
+      self.logger.info(f'{link} is blacklisted')
+      try: 
+        raise scrapy.exceptions.IgnoreRequest();
+      except:
+        pass #TODO rly?
+      #TODO not here, it doesn
+
+  def headers_received(self, headers, body_length, request, spider): #are the args correct? how self works here?
     if 'robots.txt' not in request.url and b'text/html' not in headers['content-type']:
       self.logger.info(f'{request.url} - not HTML')
       raise scrapy.exceptions.StopDownload(fail=False)

@@ -38,19 +38,20 @@ def web_index():
 def web_search():
   q = bottle.request.query['q']
   urls = search(q)[:100]
-  print(urls)
+  #print(urls)
   #todo gen_res
   res = [{'url':u, 'title':docs[u]['title'], 'desc':'foo'} for u in urls]
-  print(res)
+  #print(res)
   sres = json.dumps(res)
-  print(sres)
+  #print(sres)
   return json.dumps(res)
 
 @bottle.route('/<pathname:path>')
 def web_static(pathname):
     return bottle.static_file(pathname, root='static')
 
-bottle.run(host='localhost', port=8080, debug=True)
+print('whooptiedoo!')
+bottle.run(host='localhost', port=1337, debug=True)
 
 
 

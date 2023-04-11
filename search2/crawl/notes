@@ -1,0 +1,40 @@
+read the old code
+
+just crawlin for links first?
+
+making it run in the bg
+
+problems
+  high load time pages
+    examples:
+      high latency pages
+      low bandwidth pages
+      huge pages
+    can I emulate them?
+  how not to get blocked?
+
+figure out scrapy
+it probably solves more problems than I know I have
+
+understanding http
+  is requesting headers separately much slower?
+
+does latency affect bandwidth for TCP?
+  should depend on ?frame? size
+    the acks have to travel...
+
+monitor traffic
+  is it tru that outgoing requests come on different ports?
+
+how is incomming traffic from 2 different sources at once, possible?
+  it isn't at once
+  it's queued, by router probably
+    rly?
+
+crawl only through html
+  
+
+fakesrv
+  te
+
+blacklist with scrapy?

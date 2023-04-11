@@ -2,19 +2,14 @@
 ;SECTIONS
 
 todo
-questions
 hackier
+iffy
 writeup
 
 ==================================================
 ;TODO
 
-
-
-==================================================
-;QUESTIONS
-
-question
+remove unnecessary ranting
 
 ==================================================
 ;HACKIER
@@ -33,6 +28,13 @@ search with
   manticore
     
 
+==================================================
+;IFFY
+
+why B2B model dominates
+  people are more likely to spend money if they view it as an investment
+
+not against bazaar
 
 ==================================================
 ;WRITEUP
@@ -48,16 +50,10 @@ search engine for the non-garbage internet
 
 PoC || GTFO?
 
-
-please tell me why am I wrong
-
-
 50000 crocuses
 	weirdness without hype
 		not that hype is necessarily bad
 
-what Cristopher Alexander called "anal"
-	it may be full of shit and if it isn't, it will be
 
 sites to be read and navigated
 
@@ -68,8 +64,9 @@ css zen garden
 
 spartan nojs
 
-search the web that's not sucker based!
 
+[redact, it's not about suckers, it's about sucking in]
+search the web that's not sucker based!
 scammer owned sucker based economy
 
 psychological problem
@@ -81,9 +78,6 @@ what is the web for
 
 
 rediscovery of the good old internet
-
-not against bazaar
-JC at the temple
 
 amish?
 
@@ -121,12 +115,17 @@ computers and programmers need food
 we sell the part of it that really scales
   ml models, compute & stuff
 
-the puropose of the co
 
-to give the ecosystem a monarchical branch
+==================================================
+;UNCATEGORIZED
 
-i'm a larva
-	
-does the defense win?
+uncategorized
 
-it won't be datamining, users are not rocks
+crawl requirements
+  heat
+  limiting large files
+    request size thingy?
+      does it fail spuriously?
+  limiting slow sites
+    race
+  

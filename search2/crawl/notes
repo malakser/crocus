@@ -38,3 +38,8 @@ fakesrv
   te
 
 blacklist with scrapy?
+
+IgnoreRequest
+StopDownload
+
+RTFM (all of it!)

@@ -46,3 +46,26 @@ RTFM (all of it!)
 
 it kinda feels slower
   randomness probably
+
+about 30000 pages over night
+  it's much worse tham my previous crawler
+
+quickwit
+
+correct header - what about xml, xhmtl & stuff?
+
+why it didn't have the header problem in the "parse" method?
+
+what's a decorator?
+
+common crawl
+  first, I just want page urls and their links
+  or maybe just download subsets of data, yeet stuff with scripts, download more, etc
+  is offset in bytes or lines?
+
+webgraph trick
+  shallow crawl of each domain homepage for ads
+    noscript first
+  filter stuff from cc index
+  
+alexa 1 million?

@@ -69,3 +69,15 @@ webgraph trick
   filter stuff from cc index
   
 alexa 1 million?
+
+can the DNS server be throttling me?
+twistedIO threadpool
+what is twisted anyway?
+how many concurrent requests is enough
+is there a way to measure my current total download bandwidth
+what's the exact message?
+
+vk detecting that I'm not using chrome
+  supposedly html headers other than UA leak information about the browser
+
+how about crawling the hosts?

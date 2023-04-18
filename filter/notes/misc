@@ -188,6 +188,7 @@ I hit search
 		application
 			event happens
 			page disappears
+      http
 			[lower layer stuff]
 		presentation
 			request gets prepared
@@ -210,6 +211,7 @@ I hit search
 	stuff not on my computer
 the result page appears
 	dynamically loaded content loads
+
 
 dns?
 big site IPs
@@ -245,4 +247,4 @@ display result, but with the true URL
 
 links to block:
 https://zielonyogrodek.pl/katalog-roslin/byliny/9013-przylaszczka-pospolita	
-https://www.bicycling.com/repair/g20032398/how-to-do-these-five-common-bicycle-repairs/
+ttps://www.bicycling.com/repair/g20032398/how-to-do-these-five-common-bicycle-repairs/

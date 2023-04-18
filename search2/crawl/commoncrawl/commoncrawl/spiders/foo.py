@@ -18,7 +18,8 @@ def parse_line():
 def bad_apples():
   domains = [
     'vk.com',
-    'tastefulgarden.com'
+    'tastefulgarden.com',
+    'logicgate.com',
   ]
   for i, d in enumerate(domains):
     yield f'https://{d}', i, {

@@ -81,3 +81,58 @@ vk detecting that I'm not using chrome
   supposedly html headers other than UA leak information about the browser
 
 how about crawling the hosts?
+  are github.io pages hosts?
+    prolly
+      check commoncrawl
+
+homepage-first ad-free heuristic
+
+making it sane on 2 computers
+  edit on the server?
+
+adprobe server
+making it distributed
+
+telnet console
+  does it work on the other computer?
+
+
+js thingy
+
+take the commoncrawl top site list
+  why not use the alexa ranking?
+    is it up to date
+    how is it made
+filter home pages with puppeteer
+scrape clean websites with scrapy
+
+ideally I'll do a little bit of each all at once
+
+how to make the subsystems not get in the way of each other?
+  apparently you can read an open file
+  can you read a file that's being written?
+    what happens if you try?
+      does it break?
+      does it wait?
+
+the problem with resource allocation
+
+
+consent-o-matic
+
+installing extensions for puppeteer
+
+concurrent tabs
+  resolve an array of promises concurrently
+  is there something like that for generators?
+
+
+reorganize the fustercluck
+
+how google really makes money search
+  the "ad" checkbox?
+    does my adblock block it?
+      doesn't seem like so
+
+
+

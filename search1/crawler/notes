@@ -36,6 +36,8 @@ ml
 ==================================================
 ;CRAWL HEURISTICS
 
+[hindsight - meh]
+
 ad stink
 
 can the script request an ad?
@@ -78,7 +80,10 @@ duplicate crawling
     it's not a bug!
       or is it?
       sometimes https sites got blocked while http didn't
-        maybe it's the crawl order
+        maybe it's the crawl order:
+          http://foo.com/bar - pass
+          http://foo.com/ads - block
+          https://foo.com/bar - block
 
 http://ctm.crouchingtigerhiddenfruitbat.org/pub/cygwin/circa/2019/02/21/161443/index.html
 	large site with consistent, slow download
@@ -102,13 +107,14 @@ sneaky bug
 ==================================================
 ;REFACTOR
 
+[hindsight - naah]
+
 informal description
 A crawler visits sites, discovers links for other sites and visits them
   errors
   blacklist
   saving
     restart
-
 
 defaultdicts and dataclasses considered harmful?
   can't have nice things without introducing even more complexity

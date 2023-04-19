@@ -179,53 +179,6 @@ express stuff
 
 factor out the search loop
 
-
-==================================================
-;WHAT HAPPENS WHEN I HIT SEARCH
-
-I hit search
-	down the OSI
-		application
-			event happens
-			page disappears
-      http
-			[lower layer stuff]
-		presentation
-			request gets prepared
-			[lower layer stuff]
-		session
-			socket?
-			[lower layer stuff]
-		transport
-			tcp?
-				ACK/NACKs
-			[lower layer stuff]
-		network
-			routing?
-			[lower layer stuff]
-		data link
-			ARP
-			frames
-			[lower layer stuff]
-		physical
-	stuff not on my computer
-the result page appears
-	dynamically loaded content loads
-
-
-dns?
-big site IPs
-
-multiple tabs send requests to an http sever
-how do they get correct responses?
-	some kind of connection id?
-same with websockets
-
-print request headers
-
-dumping whole request as JSON
-
-
 ==================================================
 ;UNCATEGORIZED
 

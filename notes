@@ -9,7 +9,6 @@ writeup
 ==================================================
 ;TODO
 
-remove unnecessary ranting
 
 ==================================================
 ;HACKIER
@@ -57,17 +56,8 @@ PoC || GTFO?
 
 sites to be read and navigated
 
-you can do a lot with css
-
-css zen garden
-  some of it looks gnarly
 
 spartan nojs
-
-
-[redact, it's not about suckers, it's about sucking in]
-search the web that's not sucker based!
-scammer owned sucker based economy
 
 psychological problem
 
@@ -77,12 +67,8 @@ what is the web for
   does JS improve you getting the information
 
 
-rediscovery of the good old internet
 
 amish?
-
-nojs
-	easier
 
 most js is garbage or provides very little value
 
@@ -90,42 +76,31 @@ no ads before dom load + no deferred js
 	checking for deferred js
 		puppeteer?
 
-how to make it scale?
 
 is pagerank pwnable?
 
 ;business stuff
 
 mismatch between value to the end user and the value to the contractor
+  speak normally, please
 
 newsletters to ask for email
-
 SEO spam
+
+
+google papers
+
+
+computers and programmers need food
+we sell the part of it that really scales
+  ml models, indexing,
 
 gugl
 	freeloaders
 implicit stochastic pimping
 
-google papers
-
-crocus
-the [horticulturally meanigful name] company
-
-computers and programmers need food
-we sell the part of it that really scales
-  ml models, compute & stuff
-
+one of these ad boards
 
 ==================================================
 ;UNCATEGORIZED
 
-uncategorized
-
-crawl requirements
-  heat
-  limiting large files
-    request size thingy?
-      does it fail spuriously?
-  limiting slow sites
-    race
-  

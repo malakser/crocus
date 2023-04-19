@@ -1,6 +1,8 @@
+
 read the old code
 
 just crawlin for links first?
+  that is, not persistantly storing pages
 
 making it run in the bg
 
@@ -12,35 +14,23 @@ problems
       huge pages
     can I emulate them?
   how not to get blocked?
+^^ scrapy has download timeouts
+  read up on how they are implemented
 
 figure out scrapy
-it probably solves more problems than I know I have
-
-understanding http
-  is requesting headers separately much slower?
-
-does latency affect bandwidth for TCP?
-  should depend on ?frame? size
-    the acks have to travel...
-
-monitor traffic
-  is it tru that outgoing requests come on different ports?
-
-how is incomming traffic from 2 different sources at once, possible?
-  it isn't at once
-  it's queued, by router probably
-    rly?
+  it probably solves more problems than I know I have
+    yeah, stuff like redirects
 
 crawl only through html
   
 
-fakesrv
-  te
-
 blacklist with scrapy?
+  just a normal set, like in the old crawler
+  there's some blacklist stuff for distributed scrapy on the web
 
 IgnoreRequest
 StopDownload
+^^what did I want that for?
 
 RTFM (all of it!)
 
@@ -50,9 +40,13 @@ it kinda feels slower
 about 30000 pages over night
   it's much worse tham my previous crawler
 
-quickwit
-
 correct header - what about xml, xhmtl & stuff?
+uncrawlables can be identified by extension as well
+
+mime type and detected mime type
+mime type in response headers?
+
+quickwit
 
 why it didn't have the header problem in the "parse" method?
 
@@ -85,7 +79,6 @@ how about crawling the hosts?
     prolly
       check commoncrawl
 
-homepage-first ad-free heuristic
 
 making it sane on 2 computers
   edit on the server?
@@ -103,6 +96,10 @@ take the commoncrawl top site list
   why not use the alexa ranking?
     is it up to date
     how is it made
+
+homepage-first ad-free heuristic
+  but do it for hosts, if they are what I think they are
+    check it out!
 filter home pages with puppeteer
 scrape clean websites with scrapy
 
@@ -110,10 +107,41 @@ ideally I'll do a little bit of each all at once
 
 how to make the subsystems not get in the way of each other?
   apparently you can read an open file
-  can you read a file that's being written?
-    what happens if you try?
-      does it break?
-      does it wait?
+    when I try to do it in python the file is empty
+    can I check if the file is used?
+    do I really need it for searching?
+      well, I need some kind of a pipe...
+      can't you just wait till the file is free?
+
+can you read a file that's being written?
+  what happens if you try?
+    does it break?
+    does it wait?
+
+named pipes
+  are they good?
+
+manually setting request priority in scrapy
+does scrapy schedule non-start requests when start_requests didn't finish?
+  how to test that?
+
+filter - crawler interface
+
+
+generator that waits for a signal?
+
+
+prioritizing homepages when crawling?
+  scrapy depth priority
+
+the systems
+  host filter
+  crawler
+  indexer, search
+    hopefully quickwit does that
+
+interface between systems
+
 
 the problem with resource allocation
 
@@ -134,5 +162,22 @@ how google really makes money search
     does my adblock block it?
       doesn't seem like so
 
+small-scale search index
+craw
 
+crawler-test.com
 
+inspect other sites with js detection misses
+  or not
+
+many cool sites use benign scripts
+
+todo:
+  figure out how to work on the remote computer sanely
+  check out the hosts rank from CC
+  write a filter
+  quickwit
+
+keep the data separately
+
+mop up this file?

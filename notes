@@ -7,10 +7,6 @@ iffy
 writeup
 
 ==================================================
-;TODO
-
-
-==================================================
 ;HACKIER
 
 glue up as much as possible
@@ -26,14 +22,6 @@ search with
   sphinx
   manticore
     
-
-==================================================
-;IFFY
-
-why B2B model dominates
-  people are more likely to spend money if they view it as an investment
-
-not against bazaar
 
 ==================================================
 ;WRITEUP
@@ -95,6 +83,11 @@ computers and programmers need food
 we sell the part of it that really scales
   ml models, indexing,
 
+how google really makes money search
+  the "ad" checkbox?
+    does my adblock block it?
+      doesn't seem like so
+
 gugl
 	freeloaders
 implicit stochastic pimping
@@ -103,4 +96,16 @@ one of these ad boards
 
 ==================================================
 ;UNCATEGORIZED
+
+set up github auth on this compter
+
+reorganize the fustercluck
+
+many cool sites use benign scripts
+
+just 1 note file?
+  with sections
+
+or 2 files
+notes, old_notes
 

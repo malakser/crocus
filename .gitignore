@@ -2,3 +2,4 @@ __pycache__
 dranks.txt
 *out.json
 /data
+*.swp

@@ -1,10 +1,22 @@
 ==================================================
 ;SECTIONS
 
+sections
 todo
 hackier
-iffy
 writeup
+architecture
+filter
+crawler
+low level crwaling stuff
+high level crwaling stuff
+scrapy
+common crawl
+search
+uncategorized
+
+==================================================
+;TODO
 
 ==================================================
 ;HACKIER
@@ -19,6 +31,7 @@ search with
   elasticlunrjs
     they have nicely styled homepage
     they tell me not to do it
+      do they really?
   sphinx
   manticore
     
@@ -26,6 +39,8 @@ search with
 ==================================================
 ;WRITEUP
 
+
+Crocus - it's basically adblock^2
 
 search for the actual information
 
@@ -95,17 +110,171 @@ implicit stochastic pimping
 one of these ad boards
 
 ==================================================
-;UNCATEGORIZED
+;ARCHITECTURE
 
-set up github auth on this compter
+interface between systems
+
+
+the problem with resource allocation
+
+
+the systems
+  filter
+  crawler
+  indexer, search
+
+named pipes
+  are they good?
+
+homepage-first ad-free heuristic
+  but do it for hosts, if they are what I think they are
+    check it out!
+filter home pages with puppeteer
+scrape clean websites with scrapy
+
+filter-crawler interface
+  generator that waits for a signal?
+
+==================================================
+;FILTER
+
+the abstraction I'm looking for
+  a promise queue that automagically gets filled up to n promises using a generator
+
+concurrent tabs
+  resolve an array of promises concurrently
+  is there something like that for generators?
+
+consent-o-matic
+
+installing extensions for puppeteer
+
+making it distributed
+
+take the commoncrawl host site links
+  [url]
+  why not use the alexa 1 million?
+    is it up to date
+    how is it made
+
+how about crawling the hosts?
+  are github.io pages hosts?
+    prolly
+      check commoncrawl
+
+==================================================
+;CRAWLER
+
+
+testing
+  crawler-test.com
+
+setting request priority
+
+prioritizing homepages when crawling?
+  scrapy depth priority
+
+==================================================
+;LOW LEVEL CRWALING STUFF
+
+problems
+  high load time pages
+    examples:
+      high latency pages
+      low bandwidth pages
+      huge pages
+    can I emulate them?
+  how not to get blocked?
+^^ scrapy has download timeouts
+  read up on how they are implemented
+
+redirects
+
+==================================================
+;HIGH LEVEL CRWALING STUFF
+
+correct header - what about xml, xhmtl & stuff?
+uncrawlables can be identified by extension as well
+
+mime type and detected mime type
+mime type in response headers?
+
+==================================================
+;SCRAPY
+
+"you don't need scrapy for JS, because it can do requests concurrently already"
+  seems really fishy, but why?
+    stuff like number of concurrent requests
+
+vk detecting that I'm not using chrome
+  supposedly html headers other than UA leak information about the browser
+    copied headers, still doesn't work
+
+making it run in the bg
+
+blacklist with scrapy?
+  just a normal set, like in the old crawler
+  there's some blacklist stuff for distributed scrapy on the web
+
+IgnoreRequest
+StopDownload
+^^what did I want that for?
+
+RTFM (all of it!)
+
+about 30000 pages over night
+  it's much worse tham my previous crawler
+^^?clobbered? by slow requests?
+
+
+why it didn't have the header problem in the "parse" method?
+  what header problem?
+    i was trying to yeet requests to documents with wrong file types
+
+can the DNS server be throttling me?
+twistedIO threadpool
+what is twisted anyway?
+how many concurrent requests is enough
+is there a way to measure my current total download bandwidth
+what's the exact message?
+
+telnet console
+  does it work on the other computer?
+
+manually setting request priority 
+does scrapy schedule non-start requests when start_requests didn't finish?
+  how to test that?
+
+==================================================
+;COMMON CRAWL
+
+common crawl
+  first, I just want page urls and their links
+  or maybe just download subsets of data,
+  yeet stuff with scripts, download more, etc
+    tried, bad idea
+
+  is offset in bytes or lines?
+    what offset?
+
+==================================================
+;SEARCH
+
+small-scale search index
+
+that quickwit stuff might be too sophisticated
+maybe try elasticlunrjs or smth
+
+quickwit
+
+==================================================
+;UNCATEGORIZED
 
 reorganize the fustercluck
 
-many cool sites use benign scripts
-
-just 1 note file?
-  with sections
-
-or 2 files
-notes, old_notes
-
+\    _    /
+|\__/ \__/|
+| _|+_+|_ |
+|/ \_ _/ \|
+/   | |   \
+   

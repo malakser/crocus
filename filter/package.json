@@ -1,0 +1,11 @@
+{
+  "name": "filter",
+  "version": "1.0.0",
+  "main": "index.mjs",
+  "license": "MIT",
+  "dependencies": {
+    "@cliqz/adblocker-puppeteer": "^1.26.5",
+    "puppeteer": "^19.10.1",
+    "tiny-async-pool": "^2.1.0"
+  }
+}

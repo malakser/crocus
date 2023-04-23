@@ -140,6 +140,7 @@ filter-crawler interface
 
 the abstraction I'm looking for
   a promise queue that automagically gets filled up to n promises using a generator
+    async pool
 
 concurrent tabs
   resolve an array of promises concurrently
@@ -163,6 +164,9 @@ how about crawling the hosts?
       check commoncrawl
 
 setting $DISPLAY
+
+hard timeout
+
 
 ==================================================
 ;CRAWLER

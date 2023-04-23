@@ -165,8 +165,8 @@ how about crawling the hosts?
 
 setting $DISPLAY
 
-hard timeout
-
+weird OD bug
+detecting non-200 responses with puppeteer
 
 ==================================================
 ;CRAWLER

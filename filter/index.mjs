@@ -23,6 +23,9 @@ const browser = await puppeteer.launch({
   headless: false,
 });
 
+const page = await browser.newPage();
+await blocker.enableBlockingInPage(page);
+
 async function isLegit(url) {
 	//promise before loading page
   let bl = new Promise((resolve) => {
@@ -31,21 +34,20 @@ async function isLegit(url) {
   	});
 	});
 
-  const page = await browser.newPage();
-  await blocker.enableBlockingInPage(page);
   let pl = new Promise(async (resolve) => {
 		try {
-			await page.goto(url, { waitUntil: 'domcontentloaded', timeout:3000 });
+			await page.goto(url, { waitUntil: 'domcontentloaded'});
 		} catch (e) {
 			resolve([url, "timed out"]);
 		}
 		resolve([url, true]);
 	});
-	let a = await Promise.race([pl, bl, new Promise(r => setTimeout(r([url, 'hf']), 1000))]);
+	let a = await Promise.race([pl, bl, new Promise(async (r) => setTimeout(() => r([url, 'hard time out']), 5000))]);
 	//Why cant't r be async?	
-	await blocker.disableBlockingInPage(page);
-	await pl;
-	await page.close();
+	//await page.close();
+	//await blocker.disableBlockingInPage(page);
+	//await pl;
+  //TODO are those two necessary?
 
 	return a;
 }
@@ -66,7 +68,7 @@ for await (const l of file) {
 }
 
 for await (const l of file) {
-  if (i == 5) break;
+  if (i == 50) break;
   console.log(l);
   console.log(await isLegit('https://' + getDomain(l)));
   i++;

@@ -1,7 +1,6 @@
 import { fullLists, PuppeteerBlocker, Request } from '@cliqz/adblocker-puppeteer';
 import * as fs from 'fs';
 import * as puppeteer from 'puppeteer';
-import * as readline from 'readline';
 
 
 
@@ -53,35 +52,9 @@ async function isLegit(page, url) {
 	return a;
 }
 
-function getDomain(l) {
-  return l.split('\t')[4].split('.').reverse().join('.');
-}
+//const url = 'https://en.wikipedia.org';
+const url = 'https://en.archive.org';
 
-const file = readline.createInterface({
-    input: fs.createReadStream('../data/cc-hosts.txt'),
-    output: process.stdout,
-    terminal: false
-});
-
-for await (const l of file) {
-  break;
-}
-
-
-async function crawlSites(page) {
-  for await (const l of file) {
-    console.log(l);
-    console.log(await isLegit(page, 'https://' + getDomain(l)));
-  }
-}
-
-crawlSites(await browser.newPage());
-crawlSites(await browser.newPage());
-/*
-crawlSites(await browser.newPage());
-crawlSites(await browser.newPage());
-*/
-await crawlSites(await browser.newPage());
-
-browser.close()
-
+const page = await browser.newPage();
+console.log(await isLegit(page, url))
+await browser.close()

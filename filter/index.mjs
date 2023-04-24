@@ -20,13 +20,11 @@ const blocker = await PuppeteerBlocker.fromLists(
 
 const browser = await puppeteer.launch({
   defaultViewport: null,
-  headless: false,
+  headless: true,
 });
 
-const page = await browser.newPage();
-await blocker.enableBlockingInPage(page);
 
-async function isLegit(url) {
+async function isLegit(page, url) {
 	//promise before loading page
   let bl = new Promise((resolve) => {
 		blocker.once('request-blocked', (request) => {
@@ -62,17 +60,24 @@ const file = readline.createInterface({
     terminal: false
 });
 
-let i = 0;
 for await (const l of file) {
   break;
 }
 
-for await (const l of file) {
-  if (i == 50) break;
-  console.log(l);
-  console.log(await isLegit('https://' + getDomain(l)));
-  i++;
+
+async function crawlSites(page) {
+  await blocker.enableBlockingInPage(page);
+  for await (const l of file) {
+    console.log(l);
+    console.log(await isLegit(page, 'https://' + getDomain(l)));
+  }
 }
+
+crawlSites(await browser.newPage());
+crawlSites(await browser.newPage());
+crawlSites(await browser.newPage());
+crawlSites(await browser.newPage());
+await crawlSites(await browser.newPage());
 
 browser.close()
 

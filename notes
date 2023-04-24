@@ -165,8 +165,12 @@ how about crawling the hosts?
 
 setting $DISPLAY
 
-weird OD bug
+weird ID bug
+  apparently not opening each url in new page helps
+gr
+
 detecting non-200 responses with puppeteer
+
 
 ==================================================
 ;CRAWLER

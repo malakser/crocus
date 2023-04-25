@@ -53,7 +53,8 @@ async function isLegit(page, url) {
 }
 
 //const url = 'https://en.wikipedia.org';
-const url = 'https://en.archive.org';
+//const url = 'https://en.archive.org';
+const url = 'https://github.com';
 
 const page = await browser.newPage();
 console.log(await isLegit(page, url))

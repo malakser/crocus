@@ -71,16 +71,20 @@ for await (const l of file) {
 async function crawlSites(page) {
   for await (const l of file) {
     console.log(l);
-    console.log(await isLegit(page, 'https://' + getDomain(l)));
+    const res = await isLegit(page, 'https://' + getDomain(l));
+    console.log(res);
+    if (res[1] === true) { //why can't use sync?
+      await fs.promises.appendFile('../pipes/hosts', res[0] + '\n');
+    }
   }
 }
 
-crawlSites(await browser.newPage());
-crawlSites(await browser.newPage());
 /*
 crawlSites(await browser.newPage());
 crawlSites(await browser.newPage());
+crawlSites(await browser.newPage());
 */
+//crawlSites(await browser.newPage());
 await crawlSites(await browser.newPage());
 
 browser.close()

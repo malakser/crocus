@@ -113,6 +113,18 @@ one of these ad boards
 ;ARCHITECTURE
 
 interface between systems
+  filter writes to the domains file
+  crawler writes to crawled domains file
+  cron job sends the diff of both files to the crawler to be crawled
+  same can be done for indexer ingestion
+
+or maybe it can be done as a single pipe
+  but it should be done in a way where I don't have to restart everything
+
+maybe write both to a pipe and a file
+when restarting, the file can be yeeted to a pipe
+
+making use of cc metrics
 
 
 the problem with resource allocation
@@ -169,7 +181,29 @@ weird ID bug
   apparently not opening each url in new page helps
 gr
 
-detecting non-200 responses with puppeteer
+false negatives
+  paypal.com
+  "
+    facebook.com
+    instagram.com
+  "
+    using just one page helps
+      one blocker per page?
+        it uses an external file, is it ok to instantiate it?
+        one way to find out!
+        also sniff when it I/Os
+  en.wikipedia.org
+    disabling and re-enabling blocker after each page helped
+  archive.org TODO
+  github.com
+
+install the same adblock, use the same list
+use probe
+check if preceding site makes a difference
+
+false positives
+  bbc.co.uk
+    there's a delayed redirect
 
 
 ==================================================
@@ -178,7 +212,7 @@ detecting non-200 responses with puppeteer
 
 testing
   crawler-test.com
-
+  
 setting request priority
 
 prioritizing homepages when crawling?

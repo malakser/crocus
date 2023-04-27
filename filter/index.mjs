@@ -96,7 +96,7 @@ async function crawlSites() {
       i++;
       console.log(i, res);
       if (res[1] === true) { 
-        await fs.promises.appendFile('../pipes/hosts', `${d.domain}, ${d.hc}, ${d.pr}\n`); //why can't use async stuff
+        await fs.promises.appendFile('../data/hosts', `${d.domain}, ${d.hc}, ${d.pr}\n`); //why can't use async stuff
       }
     } catch (e) {
     }

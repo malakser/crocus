@@ -5,18 +5,6 @@ import * as readline from 'readline';
 
 
 
-const blocker = await PuppeteerBlocker.fromLists(
-  fetch, 
-  fullLists,
-  {
-    enableCompression: true,
-  },
-  {
-    path: 'engine.bin',
-    read: fs.promises.readFile,
-    write: fs.promises.writeFile,
-  },
-);
 
 const browser = await puppeteer.launch({
   defaultViewport: null,
@@ -24,7 +12,8 @@ const browser = await puppeteer.launch({
 });
 
 
-async function isLegit(page, url) {
+async function isLegit(url, blocker) {
+  const page = await browser.newPage();
   await blocker.enableBlockingInPage(page);
 	//promise before loading page
   let bl = new Promise((resolve) => {
@@ -42,39 +31,74 @@ async function isLegit(page, url) {
 		}
 		resolve([url, true]);
 	});
-	let a = await Promise.race([pl, bl, new Promise(async (r) => setTimeout(() => r([url, 'hard time out']), 5000))]);
+  let tl = new Promise(async (resolve) => {
+    setTimeout(() => {
+      //console.log('hard time out');
+      resolve([url, 'hard time out']);
+    }, 10000)
+  })
+	let a = await Promise.race([pl, bl, tl]);
 	await blocker.disableBlockingInPage(page);
 	//Why cant't r be async?	
 
 	//await page.close();
 	//await pl;
   //TODO are those two necessary?
+  page.close();
 
 	return a;
 }
 
 function getDomain(l) {
-  return l.split('\t')[4].split('.').reverse().join('.');
+  const fields = l.split('\t');
+  return {
+    domain: fields[4].split('.').reverse().join('.'),
+    hc: fields[1],
+    pr: fields[3],
+  };
 }
 
-const file = readline.createInterface({
-    input: fs.createReadStream('../data/cc-hosts.txt'),
-    output: process.stdout,
-    terminal: false
-});
-
-for await (const l of file) {
-  break;
-}
-
-
-async function crawlSites(page) {
+async function* getHosts() {
+  //TODO skip already crawled
+  const file = readline.createInterface({
+      input: fs.createReadStream('../data/cc-hosts.txt'),
+      output: process.stdout,
+      terminal: false
+  });
   for await (const l of file) {
-    console.log(l);
-    const res = await isLegit(page, 'https://' + getDomain(l));
-    console.log(res);
-    if (res[1] === true) { //why can't use sync?
-      await fs.promises.appendFile('../pipes/hosts', res[0] + '\n');
+    break;
+  }
+  for await (const l of file) {
+    yield getDomain(l);
+  }
+}
+
+
+const gen = getHosts();
+let i = 0;
+
+async function crawlSites() {
+  const blocker = await PuppeteerBlocker.fromLists(
+    fetch, 
+    fullLists,
+    {
+      enableCompression: true,
+    },
+    {
+      path: 'engine.bin',
+      read: fs.promises.readFile,
+      write: fs.promises.writeFile,
+    },
+  );
+  for await (const d of gen) {
+    try {
+      const res = await isLegit('https://' + d.domain, blocker);
+      i++;
+      console.log(i, res);
+      if (res[1] === true) { 
+        await fs.promises.appendFile('../pipes/hosts', `${d.domain}, ${d.hc}, ${d.pr}\n`); //why can't use async stuff
+      }
+    } catch (e) {
     }
   }
 }
@@ -83,9 +107,12 @@ async function crawlSites(page) {
 crawlSites(await browser.newPage());
 crawlSites(await browser.newPage());
 crawlSites(await browser.newPage());
+crawlSites(await browser.newPage());
 */
-//crawlSites(await browser.newPage());
-await crawlSites(await browser.newPage());
+crawlSites();
+crawlSites();
+crawlSites();
+await crawlSites();
 
 browser.close()
 

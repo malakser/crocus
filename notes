@@ -123,6 +123,7 @@ or maybe it can be done as a single pipe
 
 maybe write both to a pipe and a file
 when restarting, the file can be yeeted to a pipe
+^^ do it with files for now
 
 making use of cc metrics
 
@@ -194,8 +195,15 @@ false negatives
         also sniff when it I/Os
   en.wikipedia.org
     disabling and re-enabling blocker after each page helped
-  archive.org TODO
-  github.com
+  "
+    archive.org TODO
+    github.com
+  "
+    one blocker per ?page sequence?
+    
+not closing pages at all
+
+not awaiting page close helps with the weird error
 
 install the same adblock, use the same list
 use probe
@@ -205,6 +213,7 @@ false positives
   bbc.co.uk
     there's a delayed redirect
 
+ProtocolError: Network.setCacheDisabled timed out. Increase the 'protocolTimeout' setting in launch/connect calls for a higher timeout if needed.
 
 ==================================================
 ;CRAWLER
@@ -217,6 +226,21 @@ setting request priority
 
 prioritizing homepages when crawling?
   scrapy depth priority
+
+
+why doesn't it quit
+  is that while loop necessary?
+
+making scrapy operate a UNIX named pipe
+  there's a pipe
+  another process puts stuffs there
+
+the crawler shouldn't quit when no crawls are scheduled
+derviative requests should proceed normally
+
+crawler vs spider in scrapy
+
+multiple spiders?
 
 ==================================================
 ;LOW LEVEL CRWALING STUFF

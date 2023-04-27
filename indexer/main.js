@@ -4,7 +4,7 @@ const tdqm = require('ntqdm');
 const express = require('express');
 
 
-let a = JSON.parse(fs.readFileSync('../data/pages.json')).map((x, i) => ({id: i, ...x})).slice(0, 5);
+let a = JSON.parse(fs.readFileSync('../data/pages.json')).map((x, i) => ({id: i, ...x}))//.slice(0, 5);
 
 const index = elasticlunr(function () {
   this.addField('url');

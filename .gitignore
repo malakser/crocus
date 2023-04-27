@@ -6,4 +6,5 @@ dranks.txt
 *.swp
 *.bin
 *.log
+*.lock
 pipes

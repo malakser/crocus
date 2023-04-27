@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "elasticlunr": "^0.9.5",
+    "express": "^4.18.2",
     "ntqdm": "^1.0.0"
   }
 }

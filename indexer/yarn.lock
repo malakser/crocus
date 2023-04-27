@@ -2,7 +2,12 @@
 # yarn lockfile v1
 
 
-elasticlunrjs@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/elasticlunrjs/-/elasticlunrjs-1.0.1.tgz#a1479765e79fb11188c2af358789be5747ddca25"
-  integrity sha512-Si+Y2Kef7AC6UVA0bgSOG20xtszLeUFmk4Yj2C73tP7OuIciwErU4ReQ8nZnT4NoB2JtcI7ia0Dr+HgoxcVFyw==
+elasticlunr@^0.9.5:
+  version "0.9.5"
+  resolved "https://registry.yarnpkg.com/elasticlunr/-/elasticlunr-0.9.5.tgz#65541bb309dddd0cf94f2d1c8861b2be651bb0d5"
+  integrity sha512-5YM9LFQgVYfuLNEoqMqVWIBuF2UNCA+xu/jz1TyryLN/wmBcQSb+GNAwvLKvEpGESwgGN8XA1nbLAt6rKlyHYQ==
+
+ntqdm@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ntqdm/-/ntqdm-1.0.0.tgz#0a06e136b76749428e8a19bbbc78c4086085942d"
+  integrity sha512-I89j2c7TyT0f/3+HdGqaZmuuRVrR1FVxv+l5hc1iFqHec/1Y2t7AhrsAHOVI1DxNWfUrUFoRli7h4ay59SDYGw==

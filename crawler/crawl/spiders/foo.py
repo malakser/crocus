@@ -17,8 +17,8 @@ class FooSpider(scrapy.Spider):
       links = response.css('a::attr(href)').getall()
       yield {
         'url': response.url,
-        'title': response.xpath('//title//text()').extract(),
-        'body': response.xpath('//body//text()').extract(),
+        'title': ''.join(response.xpath('//title//text()').extract()),
+        'body': ''.join(response.xpath('//body//text()').extract()),
         'hc': hc,
         'pr': pr,
       }

@@ -1,9 +1,10 @@
 {
   "name": "indexer",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "main.mjs",
   "license": "MIT",
   "dependencies": {
-    "elasticlunrjs": "^1.0.1"
+    "elasticlunr": "^0.9.5",
+    "ntqdm": "^1.0.0"
   }
 }

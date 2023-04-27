@@ -5,4 +5,5 @@ dranks.txt
 /data
 *.swp
 *.bin
+*.log
 pipes

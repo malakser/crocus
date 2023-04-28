@@ -19,7 +19,7 @@ const blocker = await PuppeteerBlocker.fromLists(
 
 const browser = await puppeteer.launch({
   defaultViewport: null,
-  headless: true,
+  headless: false,
 });
 
 
@@ -54,7 +54,9 @@ async function isLegit(page, url) {
 
 //const url = 'https://en.wikipedia.org';
 //const url = 'https://en.archive.org';
-const url = 'https://github.com';
+//const url = 'https://github.com';
+//const url = 'https://skype.com';
+const url = 'https://newsmax.com';
 
 const page = await browser.newPage();
 console.log(await isLegit(page, url))

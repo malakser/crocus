@@ -112,6 +112,11 @@ one of these ad boards
 ==================================================
 ;ARCHITECTURE
 
+crawler-first arch?
+  calls filter up to a threshold in a given FLD
+  making "parse" for multiple requests wait until filtering finishes
+    list of promises to resolve for each domain (until threshold is passed)
+
 interface between systems
   filter writes to the domains file
   crawler writes to crawled domains file
@@ -150,6 +155,35 @@ filter-crawler interface
 
 ==================================================
 ;FILTER
+
+the weird bug
+  why is it around 1140?
+    seems like a coincidence
+      it happens if I start crawling later
+when does it throw exceptions and when it doesn't
+it looks like a bug in puppeteer
+  the bug still happens if I restart browser each time
+  maybe it's the bug in blocker
+what is the computer doing when it freezes?
+  how to check that for arbitrary program?
+difference between bug from "hosts" and bug from "domains"
+
+rationale for separate "blockers" for concurrency
+
+fork puppeteer-cluster for worker-specific context?
+
+or just create an array of as many blockers as concurrent workers and bind
+them in task functions
+can I just cycle the blockers, or do I have to check if they are bound?
+  you have to check:
+    worker 1 starts
+    worker 2 starts
+    worker 2 finishes
+    worker 2 starts <-- here it would get the same blocker as worker 1
+
+workers have IDs, you can use them to assign blockers
+    
+
 
 the abstraction I'm looking for
   a promise queue that automagically gets filled up to n promises using a generator

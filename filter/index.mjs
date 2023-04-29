@@ -16,7 +16,7 @@ async function isLegit(url, blocker) {
   const page = await browser.newPage();
   try {
     await blocker.enableBlockingInPage(page);
-
+    //promise before loading page
     let bl = new Promise((resolve) => {
       blocker.once('request-blocked', (request) => {
         resolve([url, false]);
@@ -69,14 +69,13 @@ function getDomain(l) {
 async function* getHosts() {
   //TODO skip already crawled
   const file = readline.createInterface({
-      input: fs.createReadStream('../data/cc-main.txt'),
+      input: fs.createReadStream('../data/cc-hosts.txt'),
       output: process.stdout,
       terminal: false
   });
   let i = 0;
   for await (const l of file) {
-    if (i == 1120) break;
-		//break;
+    if (i == 1130) break;
     i++;
   }
   for await (const l of file) {
@@ -88,7 +87,7 @@ async function* getHosts() {
 const gen = getHosts();
 let i = 0;
 
-async function crawlSites(n) {
+async function crawlSites() {
   const blocker = await PuppeteerBlocker.fromLists(
     fetch, 
     fullLists,
@@ -120,10 +119,10 @@ crawlSites(await browser.newPage());
 crawlSites(await browser.newPage());
 crawlSites(await browser.newPage());
 crawlSites(await browser.newPage());
-crawlSites();
-crawlSites();
-crawlSites();
 */
+crawlSites();
+crawlSites();
+crawlSites();
 await crawlSites();
 
 browser.close()

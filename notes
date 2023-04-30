@@ -310,10 +310,16 @@ mime type in response headers?
 "you don't need scrapy for JS, because it can do requests concurrently already"
   seems really fishy, but why?
     stuff like number of concurrent requests
+    scheduling
+    robots.txt
+    duplicates
 
 vk detecting that I'm not using chrome
   supposedly html headers other than UA leak information about the browser
     copied headers, still doesn't work
+
+are the headers really identical
+  compare requests from browser and scrapy with wireshark or something
 
 making it run in the bg
 

@@ -4,61 +4,10 @@ import * as fs from 'fs';
 //import * as puppeteer from 'puppeteer';
 import * as readline from 'readline';
 
+
 const log = x => console.log(x);
 
 
-/*
-const browser = await puppeteer.launch({
-  defaultViewport: null,
-  headless: false,
-});
-*/
-
-
-async function isLegit(page, url, blocker) {
-  await blocker.enableBlockingInPage(page);
-  //promise before loading page
-  let bl = new Promise((resolve) => {
-    blocker.once('request-blocked', (request) => {
-      resolve([url, false]);
-    });
-  });
-
-  let pl = new Promise(async (resolve) => {
-    try {
-      const response = await page.goto(url, { waitUntil: 'domcontentloaded'});
-      if (response.status() !== 200) resolve([url, `status - ${response.status()}`]);
-    } catch (e) {
-      resolve([url, "timed out"]);
-    }
-    resolve([url, true]);
-  });
-  let tl = new Promise(async (resolve) => {
-    setTimeout(() => {
-      //console.log('hard time out');
-      resolve([url, 'hard time out']);
-    }, 10000)
-  })
-  let a = await Promise.race([pl, bl, tl]);
-
-  //await blocker.disableBlockingInPage(page);
-  //Why cant't r be async?	
-
-  //await page.close();
-  //await pl;
-  //TODO are those two necessary?
-  return a;
-
-}
-
-function getDomain(l) {
-  const fields = l.split('\t');
-  return {
-    domain: fields[4].split('.').reverse().join('.'),
-    hc: fields[1],
-    pr: fields[3],
-  };
-}
 
 const startingPage = 1130;
 
@@ -78,7 +27,14 @@ async function* getHosts() {
     yield getDomain(l);
   }
 }
+const hosts = getHosts();
 
+
+
+//why worker gets frozen on page 1136?
+//why when there are 2 pages, it doesn't freeze, but doesn't crawl the page either?
+//why is one worker available before it finishes crawling?
+//print all exceptions?
 
 const cc = 1;
 
@@ -87,6 +43,7 @@ const cluster = await Cluster.launch({
   //concurrency: Cluster.CONCURRENCY_BROWSER,
   maxConcurrency: cc,
 });
+
 
 const genBlocker = async () => (
     PuppeteerBlocker.fromLists(
@@ -103,13 +60,38 @@ const genBlocker = async () => (
   )
 );
 
+
 const blockers = await Promise.all(Array.from(Array(cc), genBlocker));
 log('blockers initialized');
 
 
-const gen = getHosts();
 
-let i = 0;
+
+async function isLegit(page, url, blocker) {
+  await blocker.enableBlockingInPage(page);
+  let bl = new Promise((resolve) => {
+    blocker.once('request-blocked', (request) => {
+      resolve([url, false]);
+    });
+  });
+  let pl = new Promise(async (resolve) => {
+    try {
+      const response = await page.goto(url, { waitUntil: 'domcontentloaded'});
+      if (response.status() !== 200) resolve([url, `status - ${response.status()}`]);
+    } catch (e) {
+      resolve([url, "timed out"]);
+    }
+    resolve([url, true]);
+  });
+  let tl = new Promise(async (resolve) => {
+    setTimeout(() => {
+      //console.log('hard time out');
+      resolve([url, 'hard time out']);
+    }, 10000)
+  })
+  return await Promise.race([pl, bl, tl]);
+}
+
 
 async function visit(page, url) {
   log('trying to visit ' + url);
@@ -124,63 +106,35 @@ async function visit(page, url) {
   return res === 'timeout' ? res : res.status();
 }
 
-await cluster.task(async ({worker, page, data: d}) => {
-  //const res = await isLegit(page, 'https://' + d.domain, blockers[worker.id]);
-  const res = await visit(page, 'https://' + d.domain);
+
+function getDomain(l) {
+  const fields = l.split('\t');
+  return {
+    domain: fields[4].split('.').reverse().join('.'),
+    hc: fields[1],
+    pr: fields[3],
+  };
+}
+
+
+let i = 0;
+await cluster.task(async ({worker, page, data: host}) => { // "data: host" wut?
+  //const res = await isLegit(page, 'https://' + host.domain, blockers[worker.id]);
+  const url = 'https://' + host.domain;
+  const res = await visit(page, url);
   i++;
-  console.log(startingPage + i, res);
+  console.log(`[worker ${worker.id}]: `, startingPage + i, res, url);
   if (res[1] === true) { 
-    // await fs.promises.appendFile('../data/hosts.txt', `${d.domain}, ${d.hc}, ${d.pr}\n`); //why can't use async stuff?
+    // await fs.promises.appendFile('../data/hosts.txt', `${host.domain}, ${host.hc}, ${host.pr}\n`); //why can't use async stuff?
   }
-  const next = await gen.next();
+  const next = await hosts.next();
   if (!next.done) cluster.queue(next.value);
 });
 
 
 
+
 for (let j=0; j<cc; j++) {
-  cluster.queue((await gen.next()).value);	
+  cluster.queue((await hosts.next()).value);	
 }
-
-
-/*
-async function crawlSites() {
-  const blocker = await PuppeteerBlocker.fromLists(
-    fetch, 
-    fullLists,
-    {
-      enableCompression: true,
-    },
-    {
-      path: 'engine.bin',
-      read: fs.promises.readFile,
-      write: fs.promises.writeFile,
-    },
-  );
-  for await (const d of gen) {
-    try {
-      const res = await isLegit('https://' + d.domain, blocker);
-      i++;
-      console.log(i, res);
-      if (res[1] === true) { 
-        await fs.promises.appendFile('../data/hosts.txt', `${d.domain}, ${d.hc}, ${d.pr}\n`); //why can't use async stuff
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }
-}
-
-crawlSites(await browser.newPage());
-crawlSites(await browser.newPage());
-crawlSites(await browser.newPage());
-crawlSites(await browser.newPage());
-crawlSites();
-crawlSites();
-crawlSites();
-await crawlSites();
-
-
-browser.close()
-*/
 

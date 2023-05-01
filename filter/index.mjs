@@ -57,9 +57,9 @@ async function* getHosts() {
     input: fs.createReadStream('../data/cc-hosts.txt'),
     terminal: false
   });
-  for await (const l of file) break; //skipping first line
+  //for await (const l of file) break; //skipping first line
+  file[Symbol.asyncIterator]().next();
   for await (const l of file) {
-    console.log(l);
     const host = parseHost(l);
     if (host.id >= startingHost) {
       await fs.promises.writeFile('../data/filter-last.txt', JSON.stringify(host.id));

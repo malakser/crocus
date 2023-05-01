@@ -156,6 +156,10 @@ filter-crawler interface
 ==================================================
 ;FILTER
 
+
+command line args
+  --reset option
+
 the weird bug
   why is it around 1140?
     seems like a coincidence
@@ -184,6 +188,11 @@ a promise which resolves when the cluster completes a task
   isn't it analogoust to that idea I had for crawler-first approach?
 can I resolve a promise from outside?
 an easier way would be to use an absolute timer and compare
+
+there can be a whole procedure for dealing with shitty bugs
+  the simplest way would be to yeet the whole batch into a file
+  it would be useful If I pulled the indices from the file as well
+  I wouldn't have to count reads, which is a bit messy
 
 rationale for separate "blockers" for concurrency
 

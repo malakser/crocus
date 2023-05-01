@@ -3,11 +3,18 @@ import { fullLists, PuppeteerBlocker, Request } from '@cliqz/adblocker-puppeteer
 import * as fs from 'fs';
 //import * as puppeteer from 'puppeteer';
 import * as readline from 'readline';
+import { parseArgs } from 'node:util';
 
+/*
+const {
+  cc,
+  startingPage,
+} = parseArgs({
+
+});
+*/
 
 const log = x => console.log(x);
-
-
 
 const startingPage = 1130;
 
@@ -103,7 +110,7 @@ const genBlocker = async () => (
 
 let lastCompletedTime = 0;
 
-const cc = 1;
+const cc = 3;
 const tasks = Array(cc);
 let i = 0;
 
@@ -120,15 +127,15 @@ async function genCluster() {
     if (tasks[worker.id]) log('wtf?');
     tasks[worker.id] = host;
     const url = 'https://' + host.domain;
-    //const res = await isLegit(page, url, blockers[worker.id]);
-    const res = await visit(page, url);
-    i++;
-    console.log(`[worker ${worker.id}]: `, startingPage + i, res, url);
+    const res = await isLegit(page, url, blockers[worker.id]);
+    //const res = await visit(page, url);
+    console.log(`[worker ${worker.id}]: `, startingPage + i, res);
     if (res[1] === true) { 
-      // await fs.promises.appendFile('../data/hosts.txt', `${host.domain}, ${host.hc}, ${host.pr}\n`); //why can't use async stuff?
+      await fs.promises.appendFile('../data/hosts.txt', `${host.domain}, ${host.hc}, ${host.pr}\n`); //why can't use async stuff?
     }
     tasks[worker.id] = null;
     lastCompletedTime = Date.now();
+    i++;
     const next = await hosts.next();
     if (!next.done) cluster.queue(next.value);
   });
@@ -152,6 +159,7 @@ const timeloop = async () => setTimeout(async () => {
   if (dt > 11000) {
     console.log('something\'s wrong, mate!');
     console.log('unfinished tasks: ', tasks);
+    fs.writeFile('../data/filter-last.txt', i);
     await cluster.close();
     initFoo();
   }

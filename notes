@@ -156,6 +156,13 @@ filter-crawler interface
 ==================================================
 ;FILTER
 
+handle signals for graceful exit
+  letting tasks finish for one ^C
+  exit with two ^C's 
+
+tainted batch recycling
+  doesn't seem important
+  maybe it is if critical bugs happen too often
 
 command line args
   --reset option

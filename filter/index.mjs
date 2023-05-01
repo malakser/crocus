@@ -5,33 +5,66 @@ import * as fs from 'fs';
 import * as readline from 'readline';
 import { parseArgs } from 'node:util';
 
-/*
-const {
-  cc,
-  startingPage,
-} = parseArgs({
 
+const {values} = parseArgs({
+  options: {
+    'concurrency': {
+      type: 'string',
+      short: 'c',
+    },
+    'starting-host': {
+      type: 'string',
+      short: 's',
+    },
+    'maxw-wait': {
+      type: 'string',
+      short: 'w',
+    },
+  }
 });
-*/
+
+const startingHost = values['starting-host'] ?? (() => {
+  try {
+    const text = fs.readFileSync('../data/filter-last.txt', 'utf-8');
+    return parseInt(text) + 1;
+  } catch (e) {
+    return 0; 
+  }
+})();
+const concurrency = parseInt(values['concurrency'] ?? 1);
+const maxWait = parseInt(values['max-wait'] ?? 12000);
+
+
 
 const log = x => console.log(x);
 
-const startingPage = 1130;
+log([startingHost, concurrency, maxWait]);
+
+function parseHost(l) {
+  const fields = l.split('\t');
+  return {
+    id: parseInt(fields[0]),
+    domain: fields[4].split('.').reverse().join('.'),
+    hc: fields[1],
+    pr: fields[3],
+  };
+}
+
 
 async function* getHosts() {
   //TODO skip already crawled
   const file = readline.createInterface({
-      input: fs.createReadStream('../data/cc-hosts.txt'),
-      output: process.stdout,
-      terminal: false
+    input: fs.createReadStream('../data/cc-hosts.txt'),
+    terminal: false
   });
-  let i = 0;
+  for await (const l of file) break; //skipping first line
   for await (const l of file) {
-    if (i == startingPage) break;
-    i++;
-  }
-  for await (const l of file) {
-    yield getDomain(l);
+    console.log(l);
+    const host = parseHost(l);
+    if (host.id >= startingHost) {
+      await fs.promises.writeFile('../data/filter-last.txt', JSON.stringify(host.id));
+      yield host;
+    }
   }
 }
 const hosts = getHosts();
@@ -81,15 +114,6 @@ async function visit(page, url) {
 }
 
 
-function getDomain(l) {
-  const fields = l.split('\t');
-  return {
-    domain: fields[4].split('.').reverse().join('.'),
-    hc: fields[1],
-    pr: fields[3],
-  };
-}
-
 
 
 
@@ -110,18 +134,17 @@ const genBlocker = async () => (
 
 let lastCompletedTime = 0;
 
-const cc = 3;
-const tasks = Array(cc);
-let i = 0;
+const tasks = Array(concurrency);
 
-const blockers = await Promise.all(Array.from(Array(cc), genBlocker));
+const blockers = await Promise.all(Array.from(Array(concurrency), genBlocker));
 log('blockers initialized');
+
 
 async function genCluster() {
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
     //concurrency: Cluster.CONCURRENCY_BROWSER,
-    maxConcurrency: cc,
+    maxConcurrency: concurrency,
   });
   await cluster.task(async ({worker, page, data: host}) => { // "data: host" wut?
     if (tasks[worker.id]) log('wtf?');
@@ -129,13 +152,13 @@ async function genCluster() {
     const url = 'https://' + host.domain;
     const res = await isLegit(page, url, blockers[worker.id]);
     //const res = await visit(page, url);
-    console.log(`[worker ${worker.id}]: `, startingPage + i, res);
+    console.log(`[worker ${worker.id}]:`, host.id, res);
     if (res[1] === true) { 
-      await fs.promises.appendFile('../data/hosts.txt', `${host.domain}, ${host.hc}, ${host.pr}\n`); //why can't use async stuff?
+      await fs.promises.appendFile('../data/hosts.txt', `${host.id} ${host.domain}, ${host.hc}, ${host.pr}\n`); //why can't use async stuff?
+      //^^ format it more sanely TODO
     }
     tasks[worker.id] = null;
     lastCompletedTime = Date.now();
-    i++;
     const next = await hosts.next();
     if (!next.done) cluster.queue(next.value);
   });
@@ -147,25 +170,27 @@ let cluster;
 async function initFoo() {
   cluster = await genCluster();
   lastCompletedTime = Date.now();
-  for (let j=0; j<cc; j++) {
+  for (let i=0; i<concurrency; i++) {
     cluster.queue((await hosts.next()).value);	
   }
 }
 await initFoo();
 
+
 const timeloop = async () => setTimeout(async () => {
   const dt = Date.now() - lastCompletedTime;
   console.log(dt)
-  if (dt > 11000) {
+  if (dt > maxWait) {
     console.log('something\'s wrong, mate!');
     console.log('unfinished tasks: ', tasks);
-    fs.writeFile('../data/filter-last.txt', i);
+    process.exit(-1);
+    /*
     await cluster.close();
     initFoo();
+    */
   }
   timeloop();
 }, 1000);
 timeloop();
-
 
 

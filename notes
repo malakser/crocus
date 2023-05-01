@@ -168,6 +168,23 @@ what is the computer doing when it freezes?
   how to check that for arbitrary program?
 difference between bug from "hosts" and bug from "domains"
 
+why one worker gets frozen on page 1136?
+why when there are 2 pages, it doesn't freeze, but doesn't crawl the page either?
+why is one worker available before it finishes crawling?
+
+is there a way to print all the exceptions? even those which get caught?
+
+workarounds
+  restart the cluster
+    isn't it the same as restarting browser
+      bet it ain't gonna work, but there's one way to find out
+  restart the process
+
+a promise which resolves when the cluster completes a task
+  isn't it analogoust to that idea I had for crawler-first approach?
+can I resolve a promise from outside?
+an easier way would be to use an absolute timer and compare
+
 rationale for separate "blockers" for concurrency
 
 fork puppeteer-cluster for worker-specific context?

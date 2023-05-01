@@ -31,39 +31,6 @@ const hosts = getHosts();
 
 
 
-//why worker gets frozen on page 1136?
-//why when there are 2 pages, it doesn't freeze, but doesn't crawl the page either?
-//why is one worker available before it finishes crawling?
-//print all exceptions?
-
-const cc = 1;
-
-const cluster = await Cluster.launch({
-  concurrency: Cluster.CONCURRENCY_CONTEXT,
-  //concurrency: Cluster.CONCURRENCY_BROWSER,
-  maxConcurrency: cc,
-});
-
-
-const genBlocker = async () => (
-    PuppeteerBlocker.fromLists(
-    fetch, 
-    fullLists,
-    {
-      enableCompression: true,
-    },
-    {
-      path: 'engine.bin',
-      read: fs.promises.readFile,
-      write: fs.promises.writeFile,
-    },
-  )
-);
-
-
-const blockers = await Promise.all(Array.from(Array(cc), genBlocker));
-log('blockers initialized');
-
 
 
 
@@ -117,24 +84,80 @@ function getDomain(l) {
 }
 
 
+
+
+const genBlocker = async () => (
+    PuppeteerBlocker.fromLists(
+    fetch, 
+    fullLists,
+    {
+      enableCompression: true,
+    },
+    {
+      path: 'engine.bin',
+      read: fs.promises.readFile,
+      write: fs.promises.writeFile,
+    },
+  )
+);
+
+let lastCompletedTime = 0;
+
+const cc = 1;
+const tasks = Array(cc);
 let i = 0;
-await cluster.task(async ({worker, page, data: host}) => { // "data: host" wut?
-  //const res = await isLegit(page, 'https://' + host.domain, blockers[worker.id]);
-  const url = 'https://' + host.domain;
-  const res = await visit(page, url);
-  i++;
-  console.log(`[worker ${worker.id}]: `, startingPage + i, res, url);
-  if (res[1] === true) { 
-    // await fs.promises.appendFile('../data/hosts.txt', `${host.domain}, ${host.hc}, ${host.pr}\n`); //why can't use async stuff?
-  }
-  const next = await hosts.next();
-  if (!next.done) cluster.queue(next.value);
-});
 
+const blockers = await Promise.all(Array.from(Array(cc), genBlocker));
+log('blockers initialized');
 
-
-
-for (let j=0; j<cc; j++) {
-  cluster.queue((await hosts.next()).value);	
+async function genCluster() {
+  const cluster = await Cluster.launch({
+    concurrency: Cluster.CONCURRENCY_CONTEXT,
+    //concurrency: Cluster.CONCURRENCY_BROWSER,
+    maxConcurrency: cc,
+  });
+  await cluster.task(async ({worker, page, data: host}) => { // "data: host" wut?
+    if (tasks[worker.id]) log('wtf?');
+    tasks[worker.id] = host;
+    const url = 'https://' + host.domain;
+    //const res = await isLegit(page, url, blockers[worker.id]);
+    const res = await visit(page, url);
+    i++;
+    console.log(`[worker ${worker.id}]: `, startingPage + i, res, url);
+    if (res[1] === true) { 
+      // await fs.promises.appendFile('../data/hosts.txt', `${host.domain}, ${host.hc}, ${host.pr}\n`); //why can't use async stuff?
+    }
+    tasks[worker.id] = null;
+    lastCompletedTime = Date.now();
+    const next = await hosts.next();
+    if (!next.done) cluster.queue(next.value);
+  });
+  return cluster;
 }
+
+let cluster;
+
+async function initFoo() {
+  cluster = await genCluster();
+  lastCompletedTime = Date.now();
+  for (let j=0; j<cc; j++) {
+    cluster.queue((await hosts.next()).value);	
+  }
+}
+await initFoo();
+
+const timeloop = async () => setTimeout(async () => {
+  const dt = Date.now() - lastCompletedTime;
+  console.log(dt)
+  if (dt > 11000) {
+    console.log('something\'s wrong, mate!');
+    console.log('unfinished tasks: ', tasks);
+    await cluster.close();
+    initFoo();
+  }
+  timeloop();
+}, 1000);
+timeloop();
+
+
 

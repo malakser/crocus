@@ -112,10 +112,14 @@ one of these ad boards
 ==================================================
 ;ARCHITECTURE
 
+read:
+https://realpython.com/python-async-features/
+
 crawler-first arch?
   calls filter up to a threshold in a given FLD
   making "parse" for multiple requests wait until filtering finishes
     list of promises to resolve for each domain (until threshold is passed)
+      or rather list of lambdas that resolve promises when called
 
 interface between systems
   filter writes to the domains file
@@ -284,6 +288,14 @@ ProtocolError: Network.setCacheDisabled timed out. Increase the 'protocolTimeout
 
 ==================================================
 ;CRAWLER
+ 
+allowed domains instead of same-domain links?
+	supposedly it's problematic
+		one way to find out
+
+
+can I put "yield" in a lambda and pass it to external function?
+  no
 
 better text cleanup
   no css

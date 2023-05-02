@@ -5,6 +5,7 @@ from urllib.parse import urlparse, urljoin
 
 class FooSpider(scrapy.Spider):
   name = "foo"
+  
 
   @classmethod
   def from_crawler(cls, crawler):

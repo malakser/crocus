@@ -6,7 +6,7 @@ import * as readline from 'readline';
 import { parseArgs } from 'node:util';
 
 
-const {values} = parseArgs({
+const {values, positionals} = parseArgs({
   options: {
     'concurrency': {
       type: 'string',
@@ -20,12 +20,16 @@ const {values} = parseArgs({
       type: 'string',
       short: 'w',
     },
-  }
+  },
+  allowPositionals: true,
 });
 
+
+const listName = positionals[0];
+if (!listName) throw new Error('list name argument missing');
 const startingHost = values['starting-host'] ?? (() => {
   try {
-    const text = fs.readFileSync('../data/filter-last.txt', 'utf-8');
+    const text = fs.readFileSync(`../data/filter-${listName}.txt` , 'utf-8');
     return parseInt(text) + 1;
   } catch (e) {
     return 0; 
@@ -38,7 +42,8 @@ const maxWait = parseInt(values['max-wait'] ?? 12000);
 
 const log = x => console.log(x);
 
-log([startingHost, concurrency, maxWait]);
+log([listName, startingHost, concurrency, maxWait]);
+
 
 function parseHost(l) {
   const fields = l.split('\t');
@@ -54,7 +59,7 @@ function parseHost(l) {
 async function* getHosts() {
   //TODO skip already crawled
   const file = readline.createInterface({
-    input: fs.createReadStream('../data/cc-hosts.txt'),
+    input: fs.createReadStream(`../data/cc-${listName}.txt`),
     terminal: false
   });
   //for await (const l of file) break; //skipping first line
@@ -62,7 +67,7 @@ async function* getHosts() {
   for await (const l of file) {
     const host = parseHost(l);
     if (host.id >= startingHost) {
-      await fs.promises.writeFile('../data/filter-last.txt', JSON.stringify(host.id));
+      await fs.promises.writeFile(`../data/filter-${listName}.txt`, JSON.stringify(host.id));
       yield host;
     }
   }
@@ -154,7 +159,7 @@ async function genCluster() {
     //const res = await visit(page, url);
     console.log(`[worker ${worker.id}]:`, host.id, res);
     if (res[1] === true) { 
-      await fs.promises.appendFile('../data/hosts.txt', `${host.id} ${host.domain}, ${host.hc}, ${host.pr}\n`); //why can't use async stuff?
+      await fs.promises.appendFile(`../data/${listName}.txt`, `${host.id} ${host.domain}, ${host.hc}, ${host.pr}\n`); //why can't use async stuff?
       //^^ format it more sanely TODO
     }
     tasks[worker.id] = null;

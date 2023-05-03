@@ -12,7 +12,7 @@ BOT_NAME = "crawl"
 SPIDER_MODULES = ["crawl.spiders"]
 NEWSPIDER_MODULE = "crawl.spiders"
 
-DOWNLOAD_TIMEOUT = 5
+DOWNLOAD_TIMEOUT = 10
 DNS_TIMEOUT = 5
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

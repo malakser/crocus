@@ -1,0 +1,8 @@
+index_id: foo
+
+doc_mapping:
+  field_mappings:
+    - name: title
+      type: text
+    - name: body
+      type: text

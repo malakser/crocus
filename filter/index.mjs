@@ -12,7 +12,11 @@ const {values, positionals} = parseArgs({
       type: 'string',
       short: 'c',
     },
-    'starting-host': {
+    'starting-host-abs': {
+      type: 'string',
+      short: 'S',
+    },
+    'starting-host-rel': {
       type: 'string',
       short: 's',
     },
@@ -27,12 +31,12 @@ const {values, positionals} = parseArgs({
 
 const listName = positionals[0];
 if (!listName) throw new Error('list name argument missing');
-const startingHost = values['starting-host'] ?? (() => {
+const startingHost = values['starting-host-abs'] ?? (() => {
   try {
-    const text = fs.readFileSync(`../data/filter-${listName}.txt` , 'utf-8');
-    return parseInt(text) + 1;
+    const text = fs.readFileSync(`../data/${listName}/last.txt` , 'utf-8');
+    return parseInt(text) + 1 + parseInt(values['starting-host-rel'] ?? 0);
   } catch (e) {
-    return 0; 
+    return 1; 
   }
 })();
 const concurrency = parseInt(values['concurrency'] ?? 1);
@@ -59,7 +63,7 @@ function parseHost(l) {
 async function* getHosts() {
   //TODO skip already crawled
   const file = readline.createInterface({
-    input: fs.createReadStream(`../data/cc-${listName}.txt`),
+    input: fs.createReadStream(`../data/${listName}/in.txt`),
     terminal: false
   });
   //for await (const l of file) break; //skipping first line
@@ -67,7 +71,7 @@ async function* getHosts() {
   for await (const l of file) {
     const host = parseHost(l);
     if (host.id >= startingHost) {
-      await fs.promises.writeFile(`../data/filter-${listName}.txt`, JSON.stringify(host.id));
+      await fs.promises.writeFile(`../data/${listName}/last.txt`, JSON.stringify(host.id));
       yield host;
     }
   }
@@ -159,7 +163,7 @@ async function genCluster() {
     //const res = await visit(page, url);
     console.log(`[worker ${worker.id}]:`, host.id, res);
     if (res[1] === true) { 
-      await fs.promises.appendFile(`../data/${listName}.txt`, `${host.id} ${host.domain}, ${host.hc}, ${host.pr}\n`); //why can't use async stuff?
+      await fs.promises.appendFile(`../data/${listName}/out.txt`, Object.values(host).join(' ') + '\n'); //why can't use async stuff?
       //^^ format it more sanely TODO
     }
     tasks[worker.id] = null;

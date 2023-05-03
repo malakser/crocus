@@ -1,8 +1,22 @@
+version: 0.5
+
 index_id: foo
 
 doc_mapping:
   field_mappings:
     - name: title
       type: text
+      tokenizer: default
+      record: position
+      stored: true
     - name: body
       type: text
+      tokenizer: default
+      record: position
+      stored: true
+
+search_settings:
+  default_search_fields: [title, body]
+
+indexing_settings:
+  commit_timeout_secs: 1

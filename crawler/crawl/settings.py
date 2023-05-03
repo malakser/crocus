@@ -9,10 +9,14 @@
 
 BOT_NAME = "crawl"
 
+#DEPTH_PRIORITY = 999
+#SCHEDULER_DISK_QUEUE = 'scrapy.squeues.PickleFifoDiskQueue'
+#SCHEDULER_MEMORY_QUEUE = 'scrapy.squeues.FifoMemoryQueue'
+
 SPIDER_MODULES = ["crawl.spiders"]
 NEWSPIDER_MODULE = "crawl.spiders"
 
-DOWNLOAD_TIMEOUT = 10
+DOWNLOAD_TIMEOUT = 5
 DNS_TIMEOUT = 5
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

@@ -1,6 +1,5 @@
 import scrapy
 from urllib.parse import urlparse, urljoin
-from bs4 import BeautifulSoup
 
 fake_headers = {
   'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
@@ -24,11 +23,13 @@ class FooSpider(scrapy.Spider):
   name = "foo"
   
 
+  '''
   @classmethod
   def from_crawler(cls, crawler):
     spider = super().from_crawler(crawler)
     crawler.signals.connect(spider.headers_received, signal=scrapy.signals.headers_received)
     return spider
+  '''
 
   def start_requests(self):
     self.next_id = 0;
@@ -43,29 +44,29 @@ class FooSpider(scrapy.Spider):
         }
         url = 'https://' + fields[1]
         yield scrapy.Request(url, cb_kwargs={'host': host}, headers=fake_headers)
-
+  '''
   def headers_received(self, headers, body_length, request, spider): #are the args correct? how self works here?
     if 'robots.txt' not in request.url and ('content-type' not in headers or b'text/html' not in headers['content-type']):
       self.logger.info(f'{request.url} - not HTML')
       raise scrapy.exceptions.StopDownload(fail=False)
+  '''
 
   def parse(self, response, host):
-    self.logger.warn(f'{response.url}')
+    self.next_id += 1
+    #self.logger.warn(f'{response.url}')
+    self.logger.warn(self.next_id)
     links = response.css('a::attr(href)').getall()
-    soup = BeautifulSoup(response.body, 'html.parser')
-    title = soup.title.text
-    body = soup.body.text
+    title = '\n'.join(response.xpath('//title//text()').extract()),
+    body = '\n'.join(response.xpath('//body').extract()),
     yield {
       'id': self.next_id,
       'url': response.url,
-      'title': title,
-      'body': body,
+      'title': ''.join(title),
+      'body': ''.join(body), #WUT?
       'hc': host['hc'],
       'pr': host['pr'],
     }
-    self.next_id += 1
     for l in links:
       url = urljoin(response.url, l) #TODO is there a wee bit cleaner way to do it?
       if urlparse(url).netloc == urlparse(response.url).netloc:
         yield scrapy.Request(url, cb_kwargs={'host': host}, headers=fake_headers)
-      

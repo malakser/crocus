@@ -1,7 +1,7 @@
 import scrapy
 
 def parse_line():
-  with open('../../../data/cc-hosts.txt') as f_in:
+  with open('../../../data/hosts2/in.txt') as f_in:
     f_in.readline()
     n = 1
     while line := f_in.readline():

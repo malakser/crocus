@@ -401,6 +401,26 @@ common crawl
     what offset?
 
 ==================================================
+;QUICKWIT
+
+columnar, document and index store
+effective cardinality
+
+fields:
+  record
+  tokenizer
+  stored
+  fast
+  indexed
+  fieldnorms
+
+/quickwit/quickwit-serve/src/search_api/rest_handler.rs
+	120 - struct definition
+	192 - 
+  204 - root_search
+	224
+
+==================================================
 ;SEARCH
 
 small-scale search index

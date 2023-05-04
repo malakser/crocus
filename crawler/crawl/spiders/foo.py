@@ -1,5 +1,7 @@
 import scrapy
 from urllib.parse import urlparse, urljoin
+from lxml import html
+from lxml.html.clean import Cleaner
 
 fake_headers = {
   'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
@@ -18,10 +20,23 @@ fake_headers = {
   'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.101 Safari/537.36',
 }
 
+def parse_host(l):
+  fields = l.split()
+  return {
+    'id': fields[0],
+    'domain': fields[1],
+    'hc': fields[2],
+    'pr': fields[3],
+  }
+
+def host_gen():
+  with open('../data/hosts2/out.txt') as f:
+    for l in f:
+      host = parse_host(l)
+      yield host
 
 class FooSpider(scrapy.Spider):
   name = "foo"
-  
 
   '''
   @classmethod
@@ -32,18 +47,20 @@ class FooSpider(scrapy.Spider):
   '''
 
   def start_requests(self):
-    self.next_id = 0;
-    with open('../data/hosts2/out.txt') as f:
-      for l in f:
-        fields = l.split()
-        host = {
-          'id': fields[0],
-          'domain': fields[1],
-          'hc': fields[2],
-          'pr': fields[3],
-        }
-        url = 'https://' + fields[1]
-        yield scrapy.Request(url, cb_kwargs={'host': host}, headers=fake_headers)
+    self.cleaner = Cleaner(page_structure=True,
+                           meta=True,
+                           embedded=True,
+                           links=True,
+                           style=True,
+                           processing_instructions=True,
+                           inline_style=True,
+                           scripts=True,
+                           javascript=True,
+                           comments=True)
+    self.next_id = 0
+    for host in host_gen():
+      url = 'https://' + host['domain']
+      yield scrapy.Request(url, cb_kwargs={'host': host}, headers=fake_headers)
   '''
   def headers_received(self, headers, body_length, request, spider): #are the args correct? how self works here?
     if 'robots.txt' not in request.url and ('content-type' not in headers or b'text/html' not in headers['content-type']):
@@ -54,15 +71,16 @@ class FooSpider(scrapy.Spider):
   def parse(self, response, host):
     self.next_id += 1
     #self.logger.warn(f'{response.url}')
-    self.logger.warn(self.next_id)
+    self.logger.warn(f'{self.next_id} {response.url}')
     links = response.css('a::attr(href)').getall()
     title = '\n'.join(response.xpath('//title//text()').extract()),
-    body = '\n'.join(response.xpath('//body').extract()),
+    body = self.cleaner.clean_html(html.fromstring(response.body)).text_content().strip()
+
     yield {
       'id': self.next_id,
       'url': response.url,
       'title': ''.join(title),
-      'body': ''.join(body), #WUT?
+      'body': body, #WUT?
       'hc': host['hc'],
       'pr': host['pr'],
     }

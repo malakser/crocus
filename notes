@@ -152,6 +152,8 @@ filter-crawler interface
 
 give some sites a second chance
 
+also, some additional delay after domcontentloaded
+
 handle signals for graceful exit
   letting tasks finish for one ^C
   exit with two ^C's 
@@ -280,6 +282,8 @@ ProtocolError: Network.setCacheDisabled timed out. Increase the 'protocolTimeout
 
 ==================================================
 ;CRAWLER
+
+retry nojs crawl with redirects disabled
  
 allowed domains instead of same-domain links?
 	supposedly it's problematic

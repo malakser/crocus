@@ -72,7 +72,9 @@ class FooSpider(scrapy.Spider):
     yield {
       'id': self.next_id,
       'url': response.url,
-      'body': str(response.body), 
+      'body': response.body.decode('utf-8'), 
+      'hc': host['hc'],
+      'pr': host['pr'],
     }
     if d < 1:
       links = response.css('a::attr(href)').getall()

@@ -45,6 +45,8 @@ with open('../data/pages-raw.jsonl', 'r', 1000000000) as fi:
             'url': jni['url'],
             'title': title,
             'body': cbody,
+            'hc': jni['hc'],
+            'pr': jni['pr'],
           }
           fo.write(json.dumps(jno))
           pbar.update(len(l))

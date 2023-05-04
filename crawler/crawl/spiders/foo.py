@@ -36,6 +36,7 @@ def host_gen():
       yield host
 
 hosts = [h for h in host_gen()]
+domains = [h['domain'] for h in hosts]
 
 cleaner = Cleaner(page_structure=True,
                   meta=True,
@@ -51,6 +52,7 @@ cleaner = Cleaner(page_structure=True,
 class FooSpider(scrapy.Spider):
   name = "foo"
   next_id = 0
+  allowed_domains = domains
 
   '''
   @classmethod
@@ -61,10 +63,9 @@ class FooSpider(scrapy.Spider):
   '''
 
   def start_requests(self):
-    next_id = 0
     for host in hosts:
       url = 'https://' + host['domain']
-      yield scrapy.Request(url, cb_kwargs={'host': host}, headers=fake_headers)
+      yield scrapy.Request(url, cb_kwargs={'host': host, 'd': 0}, headers=fake_headers)
 
   '''
   def headers_received(self, headers, body_length, request, spider): #are the args correct? how self works here?
@@ -73,11 +74,10 @@ class FooSpider(scrapy.Spider):
       raise scrapy.exceptions.StopDownload(fail=False)
   '''
 
-  def parse(self, response, host):
+  def parse(self, response, host, d):
     self.next_id += 1
     #self.logger.warn(f'{response.url}')
     self.logger.warn(f'{self.next_id} {response.url}')
-    links = response.css('a::attr(href)').getall()
     title = '\n'.join(response.xpath('//title//text()').extract()),
     body = cleaner.clean_html(html.fromstring(response.body)).text_content().strip()
 
@@ -89,9 +89,9 @@ class FooSpider(scrapy.Spider):
       'hc': host['hc'],
       'pr': host['pr'],
     }
-    '''
-    for l in links:
-      url = urljoin(response.url, l) #TODO is there a wee bit cleaner way to do it?
-      if urlparse(url).scheme in ['http', 'https']:
-        yield scrapy.Request(url, cb_kwargs={'host': host}, headers=fake_headers)
-    '''
+    if d < 1:
+      links = response.css('a::attr(href)').getall()
+      for l in links:
+        url = urljoin(response.url, l) #TODO is there a wee bit cleaner way to do it?
+        if urlparse(url).scheme in ['http', 'https']:
+          yield scrapy.Request(url, cb_kwargs={'host': host, 'd': d + 1}, headers=fake_headers)

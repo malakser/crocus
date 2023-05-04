@@ -283,6 +283,14 @@ ProtocolError: Network.setCacheDisabled timed out. Increase the 'protocolTimeout
 ==================================================
 ;CRAWLER
 
+GIL
+  multiprocessing?
+  yaaaaaa?
+
+measure throughput with and without separate sanitizer
+try to make the thread workers work
+or maybe just use regular threads...
+
 the CHUNKY way
   do things in large chunks
   avoid context switches

@@ -34,6 +34,7 @@ async function search() {
   var params = {q:q.value, page:page};
   url.search = (new URLSearchParams(params)).toString();
   resp = await (await fetch(url)).json(); //that await?
+  console.log(resp);
   results.innerHTML = resp.map(genResHTML).join('\n');
 }
 

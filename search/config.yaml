@@ -8,12 +8,10 @@ doc_mapping:
       type: text
       tokenizer: default
       record: position
-      stored: true
     - name: body
       type: text
       tokenizer: default
       record: position
-      stored: false
 
 search_settings:
   default_search_fields: [title, body]

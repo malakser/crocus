@@ -99,6 +99,9 @@ one of these ad boards
 ==================================================
 ;ARCHITECTURE
 
+scaling
+  kafka?
+
 read:
 https://realpython.com/python-async-features/
 
@@ -402,6 +405,9 @@ common crawl
 
 ==================================================
 ;QUICKWIT
+
+http://127.0.0.1:7280/ui/search?query=severity:ERROR&index_id=vector-otel-logs&max_hits=10 
+	^^something something ui, check this out
 
 columnar, document and index store
 effective cardinality

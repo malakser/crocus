@@ -22,7 +22,7 @@ app.get('/search', async (req, res) => {
   const foo = sres.hits.map((r, i) => ({
     url: r.url,
     title: r.title,
-    desc: sres.snippets[0].body,
+    desc: sres.snippets[i].body,
   }));
   res.json(foo);
 })

@@ -150,6 +150,8 @@ filter-crawler interface
 ==================================================
 ;FILTER
 
+give some sites a second chance
+
 handle signals for graceful exit
   letting tasks finish for one ^C
   exit with two ^C's 

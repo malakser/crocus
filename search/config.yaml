@@ -4,6 +4,11 @@ index_id: foo
 
 doc_mapping:
   field_mappings:
+    - name: url
+      fast: true
+      type: text
+      tokenizer: raw
+      record: position
     - name: title
       type: text
       tokenizer: default

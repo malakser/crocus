@@ -33,9 +33,12 @@ async function search() {
   var url = new URL(`http://${location.host}/search`);
   var params = {q:q.value, page:page};
   url.search = (new URLSearchParams(params)).toString();
-  resp = await (await fetch(url)).json(); //that await?
-  console.log(resp);
-  results.innerHTML = resp.map(genResHTML).join('\n');
+  results.innerHTML = '<i>searching...</i>';
+  const resp = await fetch(url);
+  const json = await resp.json(); //that await?
+  if (json.length == 0) results.innerHTML = '<i>no results</i>';
+  else results.innerHTML = json.map(genResHTML).join('\n');
+
 }
 
 /*

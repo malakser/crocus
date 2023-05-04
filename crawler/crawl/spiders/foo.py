@@ -35,8 +35,22 @@ def host_gen():
       host = parse_host(l)
       yield host
 
+hosts = [h for h in host_gen()]
+
+cleaner = Cleaner(page_structure=True,
+                  meta=True,
+                  embedded=True,
+                  links=True,
+                  style=True,
+                  processing_instructions=True,
+                  inline_style=True,
+                  scripts=True,
+                  javascript=True,
+                  comments=True)
+
 class FooSpider(scrapy.Spider):
   name = "foo"
+  next_id = 0
 
   '''
   @classmethod
@@ -47,24 +61,15 @@ class FooSpider(scrapy.Spider):
   '''
 
   def start_requests(self):
-    self.cleaner = Cleaner(page_structure=True,
-                           meta=True,
-                           embedded=True,
-                           links=True,
-                           style=True,
-                           processing_instructions=True,
-                           inline_style=True,
-                           scripts=True,
-                           javascript=True,
-                           comments=True)
-    self.next_id = 0
-    for host in host_gen():
+    next_id = 0
+    for host in hosts:
       url = 'https://' + host['domain']
       yield scrapy.Request(url, cb_kwargs={'host': host}, headers=fake_headers)
+
   '''
   def headers_received(self, headers, body_length, request, spider): #are the args correct? how self works here?
     if 'robots.txt' not in request.url and ('content-type' not in headers or b'text/html' not in headers['content-type']):
-      self.logger.info(f'{request.url} - not HTML')
+      self.logger.warning(f'{request.url} - not HTML')
       raise scrapy.exceptions.StopDownload(fail=False)
   '''
 
@@ -74,17 +79,19 @@ class FooSpider(scrapy.Spider):
     self.logger.warn(f'{self.next_id} {response.url}')
     links = response.css('a::attr(href)').getall()
     title = '\n'.join(response.xpath('//title//text()').extract()),
-    body = self.cleaner.clean_html(html.fromstring(response.body)).text_content().strip()
+    body = cleaner.clean_html(html.fromstring(response.body)).text_content().strip()
 
     yield {
       'id': self.next_id,
       'url': response.url,
-      'title': ''.join(title),
-      'body': body, #WUT?
+      'title': ''.join(title), #WUT?
+      'body': body, 
       'hc': host['hc'],
       'pr': host['pr'],
     }
+    '''
     for l in links:
       url = urljoin(response.url, l) #TODO is there a wee bit cleaner way to do it?
-      if urlparse(url).netloc == urlparse(response.url).netloc:
+      if urlparse(url).scheme in ['http', 'https']:
         yield scrapy.Request(url, cb_kwargs={'host': host}, headers=fake_headers)
+    '''

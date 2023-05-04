@@ -283,6 +283,12 @@ ProtocolError: Network.setCacheDisabled timed out. Increase the 'protocolTimeout
 ==================================================
 ;CRAWLER
 
+the CHUNKY way
+  do things in large chunks
+  avoid context switches
+but wasn't my crawler really easy on the IO?
+  If it was, It doesn't mean that the IO was easy on the crawler
+
 retry nojs crawl with redirects disabled
  
 allowed domains instead of same-domain links?

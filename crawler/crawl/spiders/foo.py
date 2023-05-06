@@ -49,6 +49,15 @@ cleaner = Cleaner(page_structure=True,
                   javascript=True,
                   comments=True)
 
+def title_truncate(t, n):
+  if len(t) <= n:
+    return t
+  words = t.split()
+  for i, w in enumerate(words):
+    t1 =  ' '.join(words[:i])
+    if len(t1) > n:
+      return t1 + '...'
+
 class FooSpider(scrapy.Spider):
   name = "foo"
   next_id = 0
@@ -84,7 +93,7 @@ class FooSpider(scrapy.Spider):
     yield {
       'id': self.next_id,
       'url': response.url,
-      'title': ''.join(title), #WUT?
+      'title': title_truncate(''.join(title), 65), #WUT?
       'body': body, 
       'hc': host['hc'],
       'pr': host['pr'],

@@ -72,11 +72,11 @@ class FooSpider(scrapy.Spider):
     yield {
       'id': self.next_id,
       'url': response.url,
-      'body': response.body.decode('utf-8'), 
+      'body': response.body, 
       'hc': host['hc'],
       'pr': host['pr'],
     }
-    if d < 1:
+    if d < 0:
       links = response.css('a::attr(href)').getall()
       for l in links:
         url = urljoin(response.url, l) #TODO is there a wee bit cleaner way to do it?

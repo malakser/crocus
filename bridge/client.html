@@ -1,0 +1,43 @@
+<input id='q' onkeypress='if (event.key == "Enter") search()' disabled>
+<input type='button' value='search' onclick='search()'>
+<div id='res'></div>
+<div><i id='status'>waiting for the dust to settle</i></div>
+<script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+<script type="text/javascript">
+  const $ = x => document.querySelector(x);
+  const print = (x, y) => $(x).innerHTML = y;
+  const append = (x, y) => $(x).innerHTML += y;
+
+	var peer = new Peer();
+	peer.on('open', function(id) {
+		console.log('My peer ID is: ' + id);
+	});
+	
+  var conn;
+  setTimeout(() => {
+    print('#status', 'connecting')
+		conn = peer.connect('puroburaren');
+		conn.on('open', function() {
+			// Receive messages
+			conn.on('data', function(data) {
+				console.log('Received', data);
+        if (data === 'connected') {
+          $('#q').disabled = false;
+          $('#q').focus();
+          print('#status', 'connected')
+        } else {
+          append('#res', `${JSON.stringify(data)}<br>`);
+        }
+			});
+			
+			// Send messages
+			//conn.send('Hello');
+		});		
+	}, 1000);
+
+  function search() {
+    const q = $('#q').value;
+    conn.send(q);
+  }
+
+</script>

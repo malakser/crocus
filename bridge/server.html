@@ -1,0 +1,25 @@
+<script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+<script type="text/javascript">
+  // https://github.com/peers/peerjs
+
+  // go here to get your own key
+	var peer = new Peer('puroburaren');
+	peer.on('open', function() {
+		console.log('My peer ID is: ', peer.id);
+	});
+
+  peer.on('connection', conn => {
+    conn.on('open', () => {
+			// Receive messages
+      conn.on('data', data => {
+        //just queries
+        //does arrow function work here?
+				console.log('Received', data);
+        conn.send({x: 1, y: 2, q: data});
+			});
+			
+			// Send messages
+			conn.send('connected');
+		});
+	});
+</script>

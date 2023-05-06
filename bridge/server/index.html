@@ -1,0 +1,35 @@
+<script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+<script type="text/javascript">
+  // https://github.com/peers/peerjs
+
+  // go here to get your own key
+	var peer = new Peer('puroburaren');
+	peer.on('open', function() {
+		console.log('My peer ID is: ', peer.id);
+	});
+
+  peer.on('connection', async conn => {
+    conn.on('open', async () => {
+			// Receive messages
+      conn.on('data', async data => {
+        //just queries
+        //does arrow function work here?
+				console.log('Received', data);
+
+        var params = {q:data};
+        //var url = new URL(`http://${location.host}/search`);
+        var url = new URL(`http://localhost:8000/search`);
+        url.search = (new URLSearchParams(params)).toString();
+        const resp = await fetch(url);
+        const json = await resp.json(); //that await?
+
+        conn.send(json)
+
+        //conn.send([{title: 'foo', url:  'https://foo.bar', desc:'bar baz'}, {title: 'boo', url: 'http://bol.oo', desc: 'blergh'}]);
+			});
+			
+			// Send messages
+			conn.send('connected');
+		});
+	});
+</script>

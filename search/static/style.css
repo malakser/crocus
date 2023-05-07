@@ -21,7 +21,12 @@ body {
 	margin: 1em;
 }
 
-#sbar {
+#status {
+	font-family: sans-serif;
+  margin: 1em;
+}
+
+#q {
 
 }
 

@@ -18,6 +18,43 @@ uncategorized
 ==================================================
 ;TODO
 
+symlink on github page?
+
+make the http and peerjs version use the same page layout
+  html file can be the same, but with different scripts linked
+
+make the peerjs connection terminate on each search
+
+move status messages up above each result
+
+the fustercluck with the bridge files
+  crocus/bridge-clinent, search/static/bridge-server
+  yeet the bridge stuff to the "static"
+  yeet the static to the top
+    name it "front"
+
+
+ui
+  better layout
+  status messages
+    waiting for the dust to settle
+    connecting
+    connected <--yeet that in "connectionless" version
+    searching
+    no resuls
+  disabling the search bar when not connected
+
+making it render properly on mobile
+
+index selection dropdown list
+
+try nojs index
+
+multiple pages
+
+about page
+  inserting images nicely
+
 ==================================================
 ;HACKIER
 

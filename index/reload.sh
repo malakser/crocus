@@ -1,6 +1,6 @@
 #!/bin/sh
 
-qw=../quickwit-v0.5.0/quickwit
+qw=../quickwit/quickwit
 
 $qw index delete -y --index foo
 $qw index create --index-config config.yaml

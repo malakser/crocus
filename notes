@@ -18,6 +18,10 @@ uncategorized
 ==================================================
 ;TODO
 
+weights
+	https://github.com/quickwit-oss/tantivy/issues/547
+	does 'or' add up score?
+
 proper filter testing
 	additional optional column for expected result?
 

@@ -6,6 +6,8 @@ import * as readline from 'readline';
 import { parseArgs } from 'node:util';
 
 
+const consentOMatic = '~/snap/chromium/common/chromium/Default/Extensions/mdjildafknihdffpkfmmpnpoiajfjnjd';
+
 const {values, positionals} = parseArgs({
   options: {
     'concurrency': {
@@ -157,6 +159,11 @@ log('blockers initialized');
 
 async function genCluster() {
   const cluster = await Cluster.launch({
+	  puppeteerOptions: {
+      args: [
+        `--load-extension=${consentOMatic}`
+      ]
+    },
     concurrency: Cluster.CONCURRENCY_CONTEXT,
     //concurrency: Cluster.CONCURRENCY_BROWSER,
     maxConcurrency: concurrency,

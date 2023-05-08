@@ -1,5 +1,5 @@
 import {Cluster as Cluster} from 'puppeteer-cluster';
-import { fullLists, PuppeteerBlocker, Request } from '@cliqz/adblocker-puppeteer';
+import { adsLists, PuppeteerBlocker, Request } from '@cliqz/adblocker-puppeteer';
 import * as fs from 'fs';
 //import * as puppeteer from 'puppeteer';
 import * as readline from 'readline';
@@ -87,31 +87,27 @@ const hosts = getHosts();
 
 
 
+const wait = async (t, ret) => new Promise(async resolve => setTimeout(() => resolve(ret), t));
 
 async function isLegit(page, url, blocker) {
   await blocker.enableBlockingInPage(page);
-  let bl = new Promise((resolve) => {
+  let blockP = new Promise((resolve) => {
     blocker.once('request-blocked', (request) => {
       resolve([url, false]);
     });
   });
-  let pl = new Promise(async (resolve) => {
+  let lifeP = new Promise(async (resolve) => {
     try {
       const response = await page.goto(url, { waitUntil: 'domcontentloaded'});
       if (response.status() !== 200) resolve([url, `status - ${response.status()}`]);
-      await new Promise(r => setTimeout(() => r(), adWait));
+      await wait(5000, 'foo');
     } catch (e) {
       resolve([url, "page error"]);
     }
     resolve([url, true]);
   });
-  let tl = new Promise(async (resolve) => {
-    setTimeout(() => {
-      //console.log('hard time out');
-      resolve([url, 'hard time out']);
-    }, 15000)
-  })
-  return await Promise.race([pl, bl, tl]);
+  let timeP = wait(15000, [url, 'hard time out']);
+  return await Promise.race([blockP, lifeP, timeP]);
 }
 
 
@@ -135,7 +131,7 @@ async function visit(page, url) {
 const genBlocker = async () => (
     PuppeteerBlocker.fromLists(
     fetch, 
-    fullLists,
+    adsLists,
     {
       enableCompression: true,
     },

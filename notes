@@ -18,6 +18,10 @@ uncategorized
 ==================================================
 ;TODO
 
+adserver in sources filter
+
+a bit more wait in filter to reduce false positives
+
 symlink on github page?
 
 make the http and peerjs version use the same page layout
@@ -186,6 +190,15 @@ filter-crawler interface
 
 ==================================================
 ;FILTER
+
+proper logic
+  blocker promise races with all others
+  the others are
+    dcl
+    timeout
+  timeout promise gets dispatched after dcl
+  timeout races with dcl
+  and then there's the wait
 
 give some sites a second chance
 
@@ -501,6 +514,9 @@ that quickwit stuff might be too sophisticated
 maybe try elasticlunrjs or smth
 
 quickwit
+
+==================================================
+;FRONTEND
 
 ==================================================
 ;UNCATEGORIZED

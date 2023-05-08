@@ -20,9 +20,13 @@ const {values, positionals} = parseArgs({
       type: 'string',
       short: 's',
     },
-    'maxw-wait': {
+    'ad-wait': {
       type: 'string',
       short: 'w',
+    },
+    'maxw-wait': {
+      type: 'string',
+      short: 'W',
     },
   },
   allowPositionals: true,
@@ -41,6 +45,7 @@ const startingHost = values['starting-host-abs'] ?? (() => {
 })();
 const concurrency = parseInt(values['concurrency'] ?? 1);
 const maxWait = parseInt(values['max-wait'] ?? 12000);
+const adWait = parseInt(values['ad-wait'] ?? 5000);
 
 
 
@@ -94,8 +99,9 @@ async function isLegit(page, url, blocker) {
     try {
       const response = await page.goto(url, { waitUntil: 'domcontentloaded'});
       if (response.status() !== 200) resolve([url, `status - ${response.status()}`]);
+      await new Promise(r => setTimeout(() => r(), adWait));
     } catch (e) {
-      resolve([url, "timed out"]);
+      resolve([url, "page error"]);
     }
     resolve([url, true]);
   });
@@ -103,7 +109,7 @@ async function isLegit(page, url, blocker) {
     setTimeout(() => {
       //console.log('hard time out');
       resolve([url, 'hard time out']);
-    }, 10000)
+    }, 15000)
   })
   return await Promise.race([pl, bl, tl]);
 }
@@ -178,6 +184,7 @@ let cluster;
 
 async function initFoo() {
   cluster = await genCluster();
+  console.log('cluster initialized');
   lastCompletedTime = Date.now();
   for (let i=0; i<concurrency; i++) {
     cluster.queue((await hosts.next()).value);	
@@ -185,7 +192,7 @@ async function initFoo() {
 }
 await initFoo();
 
-
+/*
 const timeloop = async () => setTimeout(async () => {
   const dt = Date.now() - lastCompletedTime;
   console.log(dt)
@@ -193,13 +200,9 @@ const timeloop = async () => setTimeout(async () => {
     console.log('something\'s wrong, mate!');
     console.log('unfinished tasks: ', tasks);
     process.exit(-1);
-    /*
-    await cluster.close();
-    initFoo();
-    */
   }
   timeloop();
 }, 1000);
 timeloop();
-
+*/
 

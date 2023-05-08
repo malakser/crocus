@@ -46,7 +46,7 @@ const startingHost = values['starting-host-abs'] ?? (() => {
   }
 })();
 const concurrency = parseInt(values['concurrency'] ?? 1);
-const maxWait = parseInt(values['max-wait'] ?? 12000);
+const maxWait = parseInt(values['max-wait'] ?? 30000);
 const adWait = parseInt(values['ad-wait'] ?? 5000);
 
 
@@ -99,7 +99,7 @@ async function isLegit(page, url, blocker) {
   });
   let pl = new Promise(async (resolve) => {
     try {
-      const response = await page.goto(url, { waitUntil: 'domcontentloaded'});
+      const response = await page.goto(url, { waitUntil: 'load'});
       if (response.status() !== 200) resolve([url, `status - ${response.status()}`]);
       await new Promise(r => setTimeout(() => r(), adWait));
     } catch (e) {
@@ -111,7 +111,7 @@ async function isLegit(page, url, blocker) {
     setTimeout(() => {
       //console.log('hard time out');
       resolve([url, 'hard time out']);
-    }, 15000)
+    }, maxWait)
   })
   return await Promise.race([pl, bl, tl]);
 }
@@ -164,7 +164,7 @@ async function genCluster() {
         `--load-extension=${consentOMatic}`
       ]
     },
-    concurrency: Cluster.CONCURRENCY_CONTEXT,
+    concurrency: Cluster.CONCURRENCY_PAGE,
     //concurrency: Cluster.CONCURRENCY_BROWSER,
     maxConcurrency: concurrency,
   });
@@ -198,18 +198,4 @@ async function initFoo() {
   }
 }
 await initFoo();
-
-/*
-const timeloop = async () => setTimeout(async () => {
-  const dt = Date.now() - lastCompletedTime;
-  console.log(dt)
-  if (dt > maxWait) {
-    console.log('something\'s wrong, mate!');
-    console.log('unfinished tasks: ', tasks);
-    process.exit(-1);
-  }
-  timeloop();
-}, 1000);
-timeloop();
-*/
 

@@ -18,6 +18,8 @@ uncategorized
 ==================================================
 ;TODO
 
+filter load problem
+
 weights
 	https://github.com/quickwit-oss/tantivy/issues/547
 	does 'or' add up score?
@@ -197,6 +199,13 @@ filter-crawler interface
 
 ==================================================
 ;FILTER
+
+pages can be scanned for just requests
+	
+filter load problem
+	open tabs with legit pages shouldn't take much cpu/bandwidth
+	but some pages can run a boatload of javascript
+	concurrency should be adjusted to cpu load
 
 proper logic
   blocker promise races with all others

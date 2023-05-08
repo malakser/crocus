@@ -15,7 +15,7 @@ app.listen(8000, () => {
 })
 
 app.get('/search', async (req, res) => {
-  const q = `(title:${req.query.q}) OR (body:${req.query.q})^0.01`
+  const q = `(title:${req.query.q}) OR (body:${req.query.q})^0.001`
   const sres = await search(q);
   const foo = sres.hits.map((r, i) => ({
     url: r.url,

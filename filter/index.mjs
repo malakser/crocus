@@ -87,27 +87,31 @@ const hosts = getHosts();
 
 
 
-const wait = async (t, ret) => new Promise(async resolve => setTimeout(() => resolve(ret), t));
 
 async function isLegit(page, url, blocker) {
   await blocker.enableBlockingInPage(page);
-  let blockP = new Promise((resolve) => {
+  let bl = new Promise((resolve) => {
     blocker.once('request-blocked', (request) => {
       resolve([url, false]);
     });
   });
-  let lifeP = new Promise(async (resolve) => {
+  let pl = new Promise(async (resolve) => {
     try {
       const response = await page.goto(url, { waitUntil: 'domcontentloaded'});
       if (response.status() !== 200) resolve([url, `status - ${response.status()}`]);
-      await wait(5000, 'foo');
+      await new Promise(r => setTimeout(() => r(), adWait));
     } catch (e) {
       resolve([url, "page error"]);
     }
     resolve([url, true]);
   });
-  let timeP = wait(15000, [url, 'hard time out']);
-  return await Promise.race([blockP, lifeP, timeP]);
+  let tl = new Promise(async (resolve) => {
+    setTimeout(() => {
+      //console.log('hard time out');
+      resolve([url, 'hard time out']);
+    }, 15000)
+  })
+  return await Promise.race([pl, bl, tl]);
 }
 
 

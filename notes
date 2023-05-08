@@ -18,6 +18,9 @@ uncategorized
 ==================================================
 ;TODO
 
+proper filter testing
+	additional optional column for expected result?
+
 adserver in sources filter
 
 a bit more wait in filter to reduce false positives

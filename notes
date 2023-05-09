@@ -79,15 +79,17 @@ glue up as much as possible
 
 Crocus - it's basically adblock^2
 
-search for the actual information
+a search engine that doesn't index sites with ads
 
 
 a search engine for the part of web that's actually interesting
 
+adblock doesn't block intention to block ads
+
 an attempt at making the internet awesome again
+
 search engine for the non-garbage internet
 
-PoC || GTFO?
 
 50000 crocuses
 	weirdness without hype
@@ -97,10 +99,6 @@ PoC || GTFO?
 sites to be read and navigated
 
 
-spartan nojs
-
-psychological problem
-
 
 what is the web for
   getting information
@@ -108,6 +106,7 @@ what is the web for
 
 
 
+spartan nojs
 amish?
 
 most js is garbage or provides very little value
@@ -118,6 +117,7 @@ no ads before dom load + no deferred js
 
 
 is pagerank pwnable?
+	the question is how is it pwnable
 
 ;business stuff
 
@@ -135,7 +135,7 @@ computers and programmers need food
 we sell the part of it that really scales
   ml models, indexing,
 
-how google really makes money search
+how google really makes money through search?
   the "ad" checkbox?
     does my adblock block it?
       doesn't seem like so
@@ -144,7 +144,7 @@ gugl
 	freeloaders
 implicit stochastic pimping
 
-one of these ad boards
+one of those ad boards
 
 ==================================================
 ;ARCHITECTURE
@@ -201,11 +201,15 @@ filter-crawler interface
 ;FILTER
 
 pages can be scanned for just requests
+
 	
 filter load problem
 	open tabs with legit pages shouldn't take much cpu/bandwidth
 	but some pages can run a boatload of javascript
 	concurrency should be adjusted to cpu load
+
+how much do empty pages lag?
+how much 
 
 proper logic
   blocker promise races with all others

@@ -30,7 +30,7 @@ def parse_host(l):
   }
 
 def host_gen():
-  with open('../data/hosts2/out.txt') as f:
+  with open('../data/main/out.txt') as f:
     for l in f:
       host = parse_host(l)
       yield host
@@ -98,6 +98,7 @@ class FooSpider(scrapy.Spider):
       'hc': host['hc'],
       'pr': host['pr'],
     }
+    self.logger.warn(f'yielded {self.next_id} {response.url}')
     if d < 1:
       links = response.css('a::attr(href)').getall()
       for l in links:

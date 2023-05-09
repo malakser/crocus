@@ -43,7 +43,7 @@ REACTOR_THREADPOOL_MAXSIZE = 20
 
 # Disable cookies (enabled by default)
 COOKIES_ENABLED = False
-REDIRECT_ENABLED = False
+REDIRECT_ENABLED = True
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False

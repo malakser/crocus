@@ -1,3 +1,5 @@
 fortune.com
 bbc.co.uk
 businessinsider.com
+hammburg.com
+zdnet.com

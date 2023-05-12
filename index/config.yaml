@@ -13,10 +13,12 @@ doc_mapping:
       type: text
       tokenizer: default
       record: position
+      fieldnorms: true
     - name: body
       type: text
       tokenizer: default
       record: position
+      fieldnorms: true
 
 search_settings:
   default_search_fields: [title, body]

@@ -1,15 +1,15 @@
 function genResHTML(res) {
-	const {title, desc, url} = res;
-	return `
-	<div class='res'>
-		<a class='title' href=${url}>
-			${title}
-		</a>
-			<div class=res_url>${url}</div>
-			<div class='desc'>
-				${desc}
-			</div>
-	</div>`;
+  const {title, desc, url} = res;
+  return `
+  <div class='res'>
+    <a class='title' href=${url}>
+      ${title}
+    </a>
+      <div class=res_url>${url}</div>
+      <div class='desc'>
+        ${desc}
+      </div>
+  </div>`;
 };
 
 const $ = x => document.querySelector(x);
@@ -24,6 +24,7 @@ peer.on('error', function(err) {
   print('#results', `<span style='color: red'>Peer error: ${`${err.type}`.replace('-', ' ')}</span>`);
   print('#status', 'done');
 });
+
 
 
 function search() {
@@ -50,9 +51,11 @@ function search() {
       $('#q').disabled = false;
       print('#status', 'done')
     });
-  });		
+  });    
   conn.on('error', function(err) {
     print('#results', `<span style='color: red'>Connection error: ${`${err.type}`.replace('-', ' ')}</span>`);
     print('#status', 'done');
   });
 }
+
+window.onload = () => $('#q').focus();

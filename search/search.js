@@ -17,6 +17,7 @@ app.listen(8000, () => {
 app.get('/search', async (req, res) => {
   const q = req.query.q;
   const sres = await search(q);
+    //console.log(Object.keys(sres.hits[0]));
   if (Object.keys(sres).includes('message')) {
     console.log(sres.message);
     res.json(sres.message);

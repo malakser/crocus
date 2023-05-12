@@ -18,6 +18,10 @@ uncategorized
 ==================================================
 ;TODO
 
+text wrapping
+
+quickwit index timeout thing
+
 bridge server
   timeout
   fetch error handling

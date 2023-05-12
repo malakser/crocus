@@ -48,7 +48,6 @@ function search() {
       if (data.length == 0) print('#results', 'no results');
       conn.close();
       $('#q').disabled = false;
-      $('#q').focus();
       print('#status', 'done')
     });
   });		

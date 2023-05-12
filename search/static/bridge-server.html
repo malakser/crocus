@@ -8,6 +8,14 @@
 		console.log('My peer ID is: ', peer.id);
 	});
 
+  function reconnectLoop() {
+    console.log('trying to reconnect');
+    peer.reconnect();
+    if (peer.disconnected) setTimeout(reconnectLoop, 2000);
+  }
+
+  peer.on('disconnected', reconnectLoop);
+
   peer.on('connection', async conn => {
     conn.on('open', async () => {
 			// Receive messages

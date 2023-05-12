@@ -8,7 +8,10 @@ body {
 }
 
 #logo {
+  font-family: serif;
+  font-size: 40px;
 	margin-top: 0;
+	margin-bottom: 10px;
 	color: green;
 }
 
@@ -27,7 +30,11 @@ body {
 }
 
 #q {
+  font-size: 16px;
+}
 
+#searchb {
+  font-size: 16px;
 }
 
 #results {

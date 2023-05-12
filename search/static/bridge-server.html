@@ -25,7 +25,7 @@
           const resp = await fetch(url);
           json = await resp.json(); //that await?
         } catch (e) {
-          json = "the bridge server is running, but the web server isn't";
+          json = "Error: The bridge server is running, but the web server isn't.";
         }
         conn.send(json)
 

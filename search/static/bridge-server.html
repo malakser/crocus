@@ -20,9 +20,13 @@
         //var url = new URL(`http://${location.host}/search`);
         var url = new URL(`http://localhost:8000/search`);
         url.search = (new URLSearchParams(params)).toString();
-        const resp = await fetch(url);
-        const json = await resp.json(); //that await?
-
+        let json;
+        try {
+          const resp = await fetch(url);
+          json = await resp.json(); //that await?
+        } catch (e) {
+          json = "the bridge server is running, but the web server isn't";
+        }
         conn.send(json)
 
         //conn.send([{title: 'foo', url:  'https://foo.bar', desc:'bar baz'}, {title: 'boo', url: 'http://bol.oo', desc: 'blergh'}]);

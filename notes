@@ -22,6 +22,8 @@ bridge server
   timeout
   fetch error handling
 
+index selection
+
 
 what's a vector store?
 
@@ -539,6 +541,10 @@ fields:
 
 ==================================================
 ;SEARCH
+
+better backend?
+
+meilisearch?
 
 small-scale search index
 

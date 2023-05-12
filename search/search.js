@@ -15,12 +15,17 @@ app.listen(8000, () => {
 })
 
 app.get('/search', async (req, res) => {
-  const q = `(title:${req.query.q})^300 OR body:${req.query.q}`
+  const q = req.query.q;
   const sres = await search(q);
-  const foo = sres.hits.map((r, i) => ({
-    url: r.url,
-    title: r.title ? r.title : 'Untitled',
-    desc: sres.snippets[i].body,
-  }));
-  res.json(foo);
+  if (Object.keys(sres).includes('message')) {
+    console.log(sres.message);
+    res.json(sres.message);
+  } else {
+    const foo = sres.hits.map((r, i) => ({
+      url: r.url,
+      title: r.title ? r.title : 'Untitled',
+      desc: sres.snippets[i].body,
+    }));
+    res.json(foo);
+  }
 })

@@ -1,0 +1,19 @@
+<head>
+	<meta charset='utf-8'>
+	<link rel='stylesheet' href='../style.css'>
+  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+	<script type='text/javascript' src='script.js'></script>
+</head>
+<body> 
+	<div id='header'>
+		<h1 id='logo' >Crocus!</h1>
+		<div id='sbar'>
+			<input type='text' id='q' onkeypress='if (event.key == "Enter") search()'>
+			<input type='button' value='search' onclick='search()'>
+		</div>
+	</div>
+  <i id='status'>ready</i>
+	<div class='my-hr'></div>
+	<div id='results'></div>
+	<input type='button' id='moar_button' value='moar' onclick='moar()'>
+</body>

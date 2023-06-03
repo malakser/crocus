@@ -1,0 +1,79 @@
+body {
+	margin: 0px;
+	padding: 0px;
+}
+
+.my-hr {
+	border-bottom: 1px solid #BBBBBB;
+}
+
+#logo {
+  font-family: serif;
+  font-size: 40px;
+	margin-top: 0;
+	margin-bottom: 10px;
+	color: green;
+}
+
+
+.error {
+	color: red;
+}
+
+#header {
+	margin: 1em;
+}
+
+#status {
+	font-family: sans-serif;
+  margin: 1em;
+}
+
+#q {
+  font-size: 16px;
+  width: 30%;
+}
+
+#searchb {
+  font-size: 16px;
+}
+
+#results {
+	width: 40%;
+	margin: 1em;
+	font-family: sans-serif;
+}
+
+
+#moar_button {
+	margin-left: 1em;
+	margin-bottom: 1em;
+	visibility: hidden;
+}
+
+#footer {
+	font-family: sans-serif;
+	margin: 1em;
+	height: 30%;
+}
+
+.res {
+	margin-top: 1em;
+}
+
+.title {
+	text-decoration: none;
+	font-size: 1.2em;
+	margin-top: 0.2em;
+}
+
+.res_url {
+	font-size: 0.9em;
+	margin-top: 0.2em;
+	color: #003000;
+}
+
+.desc {
+	font-size: 1em;
+	margin-top: 0.2em;
+}

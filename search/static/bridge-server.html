@@ -22,7 +22,7 @@
       conn.on('data', async data => {
         //just queries
         //does arrow function work here?
-				console.log('Received', data);
+				console.log(`${new Date().toLocaleString()}: Received`, data);
 
         var params = {q:data};
         //var url = new URL(`http://${location.host}/search`);
